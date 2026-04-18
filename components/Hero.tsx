@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
 interface TimeLeft {
@@ -32,6 +31,36 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
         {label}
       </div>
     </div>
+  )
+}
+
+const ROLLING_WORDS = ['Diplomats', 'Debaters', 'Leaders', 'Thinkers', 'Changemakers']
+
+function RollingWord() {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex(i => (i + 1) % ROLLING_WORDS.length)
+    }, 2000)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <span className="inline-flex items-center overflow-hidden" style={{ verticalAlign: 'bottom' }}>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          initial={{ y: '100%', opacity: 0 }}
+          animate={{ y: '0%',   opacity: 1 }}
+          exit={{   y: '-100%', opacity: 0 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-block text-[#2c5f5d]"
+        >
+          {ROLLING_WORDS[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   )
 }
 
@@ -86,6 +115,11 @@ export default function Hero() {
         <motion.p {...fadeUp(0.5)} className="font-inter font-semibold text-[10px] md:text-xs tracking-[0.4em] uppercase text-[#475569] mb-4">
           Where Debate Meets Diplomacy
         </motion.p>
+
+        <motion.div {...fadeUp(0.55)} className="font-cinzel font-bold text-lg md:text-2xl text-[#e5e7eb] mb-2 h-8 md:h-10 flex items-center gap-2">
+          <span className="text-[#475569]">Shaping Tomorrow&apos;s</span>
+          <RollingWord />
+        </motion.div>
 
         <motion.div {...fadeUp(0.6)} className="font-inter text-[11px] font-bold tracking-[0.25em] text-[#2c5f5d] mb-16 uppercase">
           11 // 12 &nbsp;July&nbsp; 2026
