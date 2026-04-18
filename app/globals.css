@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ────────────────────────────────────── */
+:root {
+  --bg:         #0a0d12; /* Muted Dark Blue-Black */
+  --surface:    #0f141a; /* Section Background */
+  --surface-2:  #151c24; /* Card Background */
+  --border:     #1c232b; /* Subtle Border */
+  --accent:     #2c5f5d; /* Calmer, Desaturated Teal */
+  --accent-light: #3a7a78;
+  --text-1:     #e5e7eb; /* Soft White */
+  --text-2:     #94a3b8; /* Muted Slate Gray */
+  --text-3:     #475569; /* Extra Muted */
+  
+  --shadow-none: none;
+}
+
+/* ─── Base ──────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-2);
+  overflow-x: hidden;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Ensure sections don't overflow on mobile */
+section { overflow-x: hidden; }
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #1c232b; border-radius: 4px; }
+
+/* ─── Professional Card Style (Flat) ────────────────────── */
+.card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: all 0.25s ease;
+  box-shadow: none;
+}
+
+.card:hover {
+  border-color: #2a3541;
+  background: #1a232d;
+}
+
+/* ─── Buttons — Minimal & Flat ──────────────────────────── */
+.btn-primary {
+  background: var(--accent);
+  color: var(--text-1);
+  border: 1px solid var(--accent);
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  background: var(--accent-light);
+  border-color: var(--accent-light);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  border-color: var(--text-2);
+  color: var(--text-1);
+}
+
+/* ─── Form Inputs — Clean Style ─────────────────────────── */
+.form-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+.form-input::placeholder { color: var(--text-3); }
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ─── Section Layouts ───────────────────────────────────── */
+.section-muted {
+  background: var(--surface);
+}
+
+/* ─── 3D Card Flip — Flattened Tone ─────────────────────── */
+.perspective-card { perspective: 2000px; }
+.preserve-3d { transform-style: preserve-3d; }
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 { transform: rotateY(180deg); }
+
+/* ─── Section Label ─────────────────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-inter);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 0.2rem 0.75rem;
+  border-left: 2px solid var(--accent);
+  background: transparent;
+}
+
+/* ─── Divider Ornament ──────────────────────────────────── */
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--border);
+}
+.divider-ornament::before,
+.divider-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── Marquee ───────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 50s linear infinite; }
+
