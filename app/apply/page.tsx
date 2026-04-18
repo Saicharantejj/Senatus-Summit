@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Application from '@/components/Application'
+import Payment from '@/components/Payment'
 
 export const metadata: Metadata = {
   title: 'Apply — The Senatus Summit 2026',
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 }
 
 export default function ApplyPage() {
-  return <Application />
+  return (
+    <>
+      <Application />
+      <Payment />
+    </>
+  )
 }

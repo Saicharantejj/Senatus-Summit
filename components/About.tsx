@@ -5,7 +5,7 @@ import { motion, useInView } from 'framer-motion'
 
 const stats = [
   { value: 200, suffix: '+', label: 'Expected Delegates' },
-  { value: 5,   suffix: '',  label: 'Committees' },
+  { value: 6,   suffix: '',  label: 'Committees' },
   { value: 2,   suffix: '',  label: 'Days of Debate' },
 ]
 

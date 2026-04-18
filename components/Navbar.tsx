@@ -38,7 +38,7 @@ export default function Navbar() {
         <div className="animate-marquee flex whitespace-nowrap">
           {[...Array(6)].map((_, i) => (
             <span key={i} className="mx-16 font-inter text-[8px] font-bold tracking-[0.2em] text-[#475569] uppercase">
-              Applications Now Open &nbsp;·&nbsp; Registration Closes June 15 &nbsp;·&nbsp; Senatus Summit 2026 &nbsp;·&nbsp; July 11–12
+              Applications Now Open &nbsp;·&nbsp; Seats Filling Fast — Apply Now &nbsp;·&nbsp; Senatus Summit 2026 &nbsp;·&nbsp; July 11–12 &nbsp;·&nbsp; Unità Internazionale &nbsp;·&nbsp; Where Debate Meets Diplomacy
             </span>
           ))}
         </div>

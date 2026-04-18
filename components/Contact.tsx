@@ -1,12 +1,25 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, Instagram, Twitter, Linkedin, Globe } from 'lucide-react'
+import { Mail, Instagram, Globe, Phone } from 'lucide-react'
+
+const phones = [
+  {
+    name: 'Saicharan Tej',
+    role: 'Co-Founder & Secretary General',
+    number: '+91 79752 98131',
+    href: 'tel:+917975298131',
+  },
+  {
+    name: 'Rishika Singh',
+    role: 'Co-Founder',
+    number: '+91 82875 18294',
+    href: 'tel:+918287518294',
+  },
+]
 
 const socials = [
-  { icon: Instagram, label: 'Instagram', handle: '@thesenatussummit', href: '#' },
-  { icon: Twitter,   label: 'Twitter / X', handle: '@SenatSummit',    href: '#' },
-  { icon: Linkedin,  label: 'LinkedIn',  handle: 'Senatus Summit',    href: '#' },
+  { icon: Instagram, label: 'Instagram', handle: '@thesenatussummit', href: 'https://instagram.com/thesenatussummit' },
   { icon: Globe,     label: 'Website',   handle: 'senatussummit.org', href: '#' },
 ]
 
@@ -42,19 +55,42 @@ export default function Contact() {
             <Mail className="text-[#5a8a8a]" size={18} />
           </div>
           <div>
-            <div className="font-inter text-[9px] font-semibold tracking-[0.18em] uppercase text-[#444] mb-0.5">Primary Contact</div>
-            <div className="font-cinzel font-medium text-base text-[#c0bdb8] group-hover:text-[#dedad4] transition-colors">
+            <div className="font-inter text-[9px] font-semibold tracking-[0.18em] uppercase text-[#444] mb-0.5">Email</div>
+            <div className="font-cinzel font-medium text-sm md:text-base text-[#c0bdb8] group-hover:text-[#dedad4] transition-colors">
               thesenatussummit@gmail.com
             </div>
           </div>
         </motion.a>
 
+        {/* Phone numbers */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          {phones.map((p, i) => (
+            <motion.a
+              key={p.name}
+              href={p.href}
+              {...fadeUp(0.15 + i * 0.1)}
+              className="flex items-center gap-4 card rounded-xl p-6 group"
+            >
+              <div className="w-10 h-10 rounded border border-[#1e3232] bg-[#0e1a1a] flex items-center justify-center shrink-0 group-hover:border-[#2a4242] transition-colors">
+                <Phone className="text-[#5a8a8a]" size={16} />
+              </div>
+              <div>
+                <div className="font-inter text-[9px] font-semibold tracking-[0.15em] uppercase text-[#444] mb-0.5">{p.role}</div>
+                <div className="font-cinzel font-medium text-sm text-[#c0bdb8] group-hover:text-[#dedad4] transition-colors">{p.name}</div>
+                <div className="font-inter text-[11px] text-[#475569] mt-0.5">{p.number}</div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
+
         {/* Socials */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {socials.map((s, i) => (
             <motion.a
               key={s.label}
               href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
               {...fadeUp(0.08 * (i + 1))}
               className="card rounded-xl p-5 flex flex-col items-center gap-2.5 text-center group"
             >

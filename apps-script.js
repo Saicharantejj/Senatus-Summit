@@ -12,10 +12,13 @@
 //  6. Copy the Web App URL → paste into .env.local as APPS_SCRIPT_URL
 // ─────────────────────────────────────────────────────────────
 
-const APP_SHEET     = 'Applications'
+const APP_SHEET      = 'Applications'
+const PAY_SHEET      = 'Payments'
 const STATUS_ALLOTED = 'Alloted'
+const DRIVE_FOLDER   = 'Senatus Summit 2026 — Payment Screenshots'
 
 function getAppSheet()            { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(APP_SHEET) }
+function getPaySheet()            { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(PAY_SHEET) }
 function getCommitteeSheet(name)  { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name) }
 
 // ─── ONE-TIME SETUP ──────────────────────────────────────────
@@ -77,6 +80,14 @@ function setup() {
     sheet.autoResizeColumns(1, config.headers.length)
   })
 
+  // ── Payments sheet ──
+  let paySheet = ss.getSheetByName(PAY_SHEET)
+  if (!paySheet) paySheet = ss.insertSheet(PAY_SHEET)
+  paySheet.clearContents()
+  paySheet.appendRow(['Timestamp','Full Name','Email','File Name','Drive Link','Status'])
+  styleHeaderRow(paySheet, 6, '#2a1a3a', '#c5a8d5')
+  paySheet.autoResizeColumns(1, 6)
+
   // Delete default "Sheet1" if it still exists
   const defaultSheet = ss.getSheetByName('Sheet1')
   if (defaultSheet) ss.deleteSheet(defaultSheet)
@@ -95,11 +106,19 @@ function styleHeaderRow(sheet, numCols, bgColor, fontColor) {
 // ─── ENSURE HEADERS (runtime guard) ─────────────────────────
 function ensureHeaders() {
   const ss  = SpreadsheetApp.getActiveSpreadsheet()
+  // Applications
   let sheet = ss.getSheetByName(APP_SHEET)
   if (!sheet) sheet = ss.insertSheet(APP_SHEET)
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details'])
     styleHeaderRow(sheet, 9, '#1a3a2a', '#a8d5b5')
+  }
+  // Payments
+  let paySheet = ss.getSheetByName(PAY_SHEET)
+  if (!paySheet) paySheet = ss.insertSheet(PAY_SHEET)
+  if (paySheet.getLastRow() === 0) {
+    paySheet.appendRow(['Timestamp','Full Name','Email','File Name','Drive Link','Status'])
+    styleHeaderRow(paySheet, 6, '#2a1a3a', '#c5a8d5')
   }
 }
 
@@ -189,7 +208,14 @@ function doGet() {
 function doPost(e) {
   ensureHeaders()
   try {
-    const data      = JSON.parse(e.postData.contents)
+    const data = JSON.parse(e.postData.contents)
+
+    // ── Route: payment screenshot upload ──
+    if (data.action === 'payment') {
+      return handlePayment(data)
+    }
+
+    // ── Route: delegate application ──
     const committee = String(data.committeePreference || '').trim()
     const portfolio = String(data.countryPreference   || '').trim()
 
@@ -258,6 +284,49 @@ function markAllotedInCommitteeSheet(committee, portfolio) {
       }
     }
   }
+}
+
+// ─── Handle payment screenshot ───────────────────────────────
+function handlePayment(data) {
+  try {
+    const name      = String(data.name      || '').trim()
+    const email     = String(data.email     || '').trim()
+    const fileName  = String(data.fileName  || 'screenshot.jpg').trim()
+    const fileBase64 = String(data.fileBase64 || '')
+
+    if (!name || !email || !fileBase64) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ success: false, error: 'Missing required fields.' }))
+        .setMimeType(ContentService.MimeType.JSON)
+    }
+
+    // Save image to Google Drive
+    const folder  = getOrCreateFolder(DRIVE_FOLDER)
+    const blob    = Utilities.newBlob(Utilities.base64Decode(fileBase64), 'image/jpeg', fileName)
+    const file    = folder.createFile(blob)
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
+    const driveLink = file.getUrl()
+
+    // Log to Payments sheet
+    const ts = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+    getPaySheet().appendRow([ts, name, email, fileName, driveLink, 'Pending Verification'])
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: true }))
+      .setMimeType(ContentService.MimeType.JSON)
+
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON)
+  }
+}
+
+// ─── Get or create a Drive folder ────────────────────────────
+function getOrCreateFolder(folderName) {
+  const iter = DriveApp.getFoldersByName(folderName)
+  if (iter.hasNext()) return iter.next()
+  return DriveApp.createFolder(folderName)
 }
 
 // ─── Portfolio data ───────────────────────────────────────────
