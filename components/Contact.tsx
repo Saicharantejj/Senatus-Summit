@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, Instagram, Globe, Phone } from 'lucide-react'
+import { Mail, Instagram, Phone } from 'lucide-react'
 
 const phones = [
   {
@@ -19,8 +19,7 @@ const phones = [
 ]
 
 const socials = [
-  { icon: Instagram, label: 'Instagram', handle: '@thesenatussummit', href: 'https://instagram.com/thesenatussummit' },
-  { icon: Globe,     label: 'Website',   handle: 'senatussummit.org', href: '#' },
+  { icon: Instagram, label: 'Instagram', handle: '@the.senatus.summit', href: 'https://instagram.com/the.senatus.summit' },
 ]
 
 const fadeUp = (delay = 0) => ({
@@ -84,7 +83,7 @@ export default function Contact() {
         </div>
 
         {/* Socials */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {socials.map((s, i) => (
             <motion.a
               key={s.label}
@@ -101,9 +100,6 @@ export default function Contact() {
           ))}
         </div>
 
-        <motion.p {...fadeUp(0.5)} className="font-inter text-[11px] text-[#333] mt-10 tracking-wide">
-          We typically respond within 24–48 hours on working days.
-        </motion.p>
       </div>
     </section>
   )

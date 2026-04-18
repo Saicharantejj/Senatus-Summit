@@ -319,6 +319,36 @@ export default function Application() {
           </p>
         </motion.div>
 
+        {/* Delegate Fees */}
+        <motion.div {...fadeUp(0.15)} className="mb-10">
+          <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569] mb-4">
+            Delegate Fees
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="card rounded-xl p-5 flex items-center gap-4">
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="font-inter text-[8px] font-bold tracking-[0.18em] uppercase text-[#475569]">
+                  UNGA · UNCSW · UNHRC · AIPPM · FIA
+                </span>
+                <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,900</span>
+                <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
+              </div>
+            </div>
+            <div className="card rounded-xl p-5 flex items-center gap-4">
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="font-inter text-[8px] font-bold tracking-[0.18em] uppercase text-[#475569]">
+                  International Press (IP)
+                </span>
+                <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,800</span>
+                <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
+              </div>
+            </div>
+          </div>
+          <p className="font-inter text-[9px] text-[#2a2a2a] mt-3 tracking-wide">
+            Fee includes access to all sessions, welcome kit, meals, and the closing banquet.
+          </p>
+        </motion.div>
+
         <AnimatePresence mode="wait">
           {success ? (
             <motion.div
