@@ -264,23 +264,33 @@ export default function Application() {
     setLoading(true)
 
     try {
+      const payload = {
+        'Full Name':          form.fullName,
+        'Email':              form.email,
+        'Phone':              form.phone,
+        'Institution':        form.institution,
+        'Committee':          form.committeePreference,
+        'Portfolio':          form.portfolioPreference,
+        'MUN Experience':     form.hasMunExperience === 'yes' ? 'Yes' : 'No',
+        'Experience Details': form.munExperienceDetails || '—',
+      }
+
+      // Send to Formspree (email notification)
       const res = await fetch('https://formspree.io/f/mgoryngd', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          'Full Name':        form.fullName,
-          'Email':            form.email,
-          'Phone':            form.phone,
-          'Institution':      form.institution,
-          'Committee':        form.committeePreference,
-          'Portfolio':        form.portfolioPreference,
-          'MUN Experience':   form.hasMunExperience === 'yes' ? 'Yes' : 'No',
-          'Experience Details': form.munExperienceDetails || '—',
-        }),
+        body:    JSON.stringify(payload),
       })
       const data = await res.json()
 
       if (res.ok) {
+        // Also log to Google Sheet for taken tracking (fire and forget)
+        fetch('/api/submit', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        }).catch(() => {})
+
         setTakenCombos(prev => [
           ...prev,
           { committee: form.committeePreference, country: form.portfolioPreference },
