@@ -227,7 +227,7 @@ function Field({
 
 export default function Application() {
   const [form, setForm]         = useState<FormState>(INITIAL)
-  const [errors, setErrors]     = useState<Partial<FormState> & { screenshot?: string }>({})
+  const [errors, setErrors]     = useState<Partial<FormState> & { screenshot?: string; form?: string }>({})
   const [loading, setLoading]   = useState(false)
   const [success, setSuccess]   = useState(false)
   const [screenshot, setScreenshot]   = useState<File | null>(null)
