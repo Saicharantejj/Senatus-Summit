@@ -34,7 +34,7 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
   )
 }
 
-const ROLLING_WORDS = ['Diplomats', 'Debaters', 'Leaders', 'Thinkers', 'Changemakers']
+const ROLLING_WORDS = ['Debaters', 'Leaders', 'Thinkers', 'Visionaries']
 
 function RollingWord() {
   const [index, setIndex] = useState(0)
