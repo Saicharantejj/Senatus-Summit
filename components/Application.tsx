@@ -264,18 +264,23 @@ export default function Application() {
     setLoading(true)
 
     try {
-      const payload = {
-        ...form,
-        countryPreference: form.portfolioPreference, // map to sheet column name
-      }
-      const res  = await fetch('/api/submit', {
+      const res = await fetch('https://formspree.io/f/mgoryngd', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          'Full Name':        form.fullName,
+          'Email':            form.email,
+          'Phone':            form.phone,
+          'Institution':      form.institution,
+          'Committee':        form.committeePreference,
+          'Portfolio':        form.portfolioPreference,
+          'MUN Experience':   form.hasMunExperience === 'yes' ? 'Yes' : 'No',
+          'Experience Details': form.munExperienceDetails || '—',
+        }),
       })
       const data = await res.json()
 
-      if (data.success) {
+      if (res.ok) {
         setTakenCombos(prev => [
           ...prev,
           { committee: form.committeePreference, country: form.portfolioPreference },
@@ -283,7 +288,7 @@ export default function Application() {
         setSuccess(true)
         setForm(INITIAL)
       } else {
-        setErrors(p => ({ ...p, portfolioPreference: data.error || 'Submission failed.' }))
+        setErrors(p => ({ ...p, portfolioPreference: data?.errors?.[0]?.message || 'Submission failed.' }))
       }
     } catch {
       setErrors(p => ({ ...p, portfolioPreference: 'Submission failed. Please try again.' }))
