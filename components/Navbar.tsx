@@ -112,6 +112,14 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="flex items-center gap-5">
+            {/* Live badge */}
+            <Link
+              href="/apply"
+              className="hidden sm:flex items-center gap-2 font-inter text-[8px] font-black tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border border-[#2c5f5d]/30 bg-[#0e1a1a] text-[#3d8a87] hover:border-[#2c5f5d]/60 hover:text-[#5aafab] transition-all duration-300"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2c5f5d] animate-pulse shadow-[0_0_6px_#2c5f5d]" />
+              Applications Open
+            </Link>
             <Link
               href="/apply"
               className="hidden md:block btn-primary font-inter font-bold tracking-[0.15em] text-[10px] px-6 py-3 rounded-full uppercase"

@@ -129,6 +129,24 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-32 pb-20 max-w-6xl mx-auto w-full">
 
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-10"
+        >
+          <span
+            className="font-inter text-[9px] font-black tracking-[0.3em] uppercase px-5 py-2 rounded-full border inline-block"
+            style={{
+              color: '#94a3b8',
+              borderColor: '#1c232b',
+              background: 'linear-gradient(135deg, #0d1117, #111720)',
+              letterSpacing: '0.28em',
+            }}
+          >
+            you are <span style={{ color: '#2c5f5d' }}>not</span> ready for this
+          </span>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
