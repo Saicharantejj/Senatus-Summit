@@ -327,10 +327,13 @@ export default function Application() {
         setScreenshot(null); setPreview(null)
         qr.hide()
       } else {
-        setErrors(p => ({ ...p, screenshot: data?.errors?.[0]?.message || 'Submission failed. Please try again.' }))
+        const msg = data?.errors?.[0]?.message || `Error ${res.status}: Submission failed. Please try again.`
+        setErrors(p => ({ ...p, form: msg }))
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
-    } catch {
-      setErrors(p => ({ ...p, screenshot: 'Submission failed. Please try again.' }))
+    } catch (err) {
+      setErrors(p => ({ ...p, form: 'Network error — please check your connection and try again.' }))
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {
       setLoading(false)
     }
@@ -448,6 +451,12 @@ export default function Application() {
               noValidate
               className="card rounded-xl p-5 sm:p-7 md:p-10 space-y-5 md:space-y-6"
             >
+              {/* Global error banner */}
+              {errors.form && (
+                <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-400 font-inter text-xs tracking-wide">
+                  ⚠ {errors.form}
+                </div>
+              )}
               {/* Row 1 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <Field label="Full Name" required error={errors.fullName}>
