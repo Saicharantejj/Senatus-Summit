@@ -287,38 +287,24 @@ export default function Application() {
     setLoading(true)
 
     try {
-      // Upload screenshot to Google Drive (fire and forget)
-      if (screenshot) {
-        const base64 = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload  = () => resolve((reader.result as string).split(',')[1])
-          reader.onerror = reject
-          reader.readAsDataURL(screenshot)
-        })
-        fetch('/api/payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: form.fullName, email: form.email, fileName: screenshot.name, fileBase64: base64 }),
-        }).catch(() => {})
-      }
+      // Submit to Formspree as multipart/form-data so the screenshot is attached as a real file
+      const fd = new FormData()
+      fd.append('Full Name',            form.fullName)
+      fd.append('Email',                form.email)
+      fd.append('Phone',                form.phone)
+      fd.append('Institution',          form.institution)
+      fd.append('Committee',            form.committeePreference)
+      fd.append('1st Portfolio Choice', form.portfolio1)
+      fd.append('2nd Portfolio Choice', form.portfolio2)
+      fd.append('3rd Portfolio Choice', form.portfolio3)
+      fd.append('MUN Experience',       form.hasMunExperience === 'yes' ? 'Yes' : 'No')
+      fd.append('Experience Details',   form.munExperienceDetails || '—')
+      if (screenshot) fd.append('Payment Screenshot', screenshot, screenshot.name)
 
-      // Submit application to Formspree
       const res = await fetch('https://formspree.io/f/mgoryngd', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          'Full Name':            form.fullName,
-          'Email':                form.email,
-          'Phone':                form.phone,
-          'Institution':          form.institution,
-          'Committee':            form.committeePreference,
-          '1st Portfolio Choice': form.portfolio1,
-          '2nd Portfolio Choice': form.portfolio2,
-          '3rd Portfolio Choice': form.portfolio3,
-          'MUN Experience':       form.hasMunExperience === 'yes' ? 'Yes' : 'No',
-          'Experience Details':   form.munExperienceDetails || '—',
-          'Payment Screenshot':   screenshot?.name ?? '—',
-        }),
+        headers: { 'Accept': 'application/json' },
+        body:    fd,
       })
       const data = await res.json()
       if (res.ok) {
