@@ -108,16 +108,16 @@ export default function Hero() {
       <motion.div
         className="glow-orb w-[800px] h-[800px] bg-[#2c5f5d] opacity-[0.12] top-[-200px] left-1/2"
         animate={{
-          x: (mousePos.x - window.innerWidth / 2) * 0.02 - 400,
-          y: (mousePos.y - window.innerHeight / 2) * 0.02,
+          x: (mousePos.x - (typeof window !== 'undefined' ? window.innerWidth : 1440) / 2) * 0.02 - 400,
+          y: (mousePos.y - (typeof window !== 'undefined' ? window.innerHeight : 900) / 2) * 0.02,
         }}
         transition={{ type: 'spring', damping: 50, stiffness: 200 }}
       />
       <motion.div
         className="glow-orb w-[500px] h-[500px] bg-[#3d7d7b] opacity-[0.08] bottom-[-100px] left-[-100px]"
         animate={{
-          x: (mousePos.x - window.innerWidth / 2) * -0.03,
-          y: (mousePos.y - window.innerHeight / 2) * -0.03,
+          x: (mousePos.x - (typeof window !== 'undefined' ? window.innerWidth : 1440) / 2) * -0.03,
+          y: (mousePos.y - (typeof window !== 'undefined' ? window.innerHeight : 900) / 2) * -0.03,
         }}
         transition={{ type: 'spring', damping: 50, stiffness: 200 }}
       />
