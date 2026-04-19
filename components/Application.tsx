@@ -1,28 +1,26 @@
 'use client'
 
-import { useState, useEffect, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Loader2, Lock } from 'lucide-react'
+import { CheckCircle, Loader2 } from 'lucide-react'
 
 interface FormState {
   fullName: string
   email: string
   phone: string
   institution: string
-  portfolioPreference: string
   committeePreference: string
+  portfolio1: string
+  portfolio2: string
+  portfolio3: string
   hasMunExperience: string
   munExperienceDetails: string
 }
 
-interface TakenCombo {
-  committee: string
-  country: string
-}
-
 const INITIAL: FormState = {
   fullName: '', email: '', phone: '', institution: '',
-  portfolioPreference: '', committeePreference: '',
+  committeePreference: '',
+  portfolio1: '', portfolio2: '', portfolio3: '',
   hasMunExperience: '', munExperienceDetails: '',
 }
 
@@ -204,37 +202,14 @@ function Field({
 }
 
 export default function Application() {
-  const [form, setForm]               = useState<FormState>(INITIAL)
-  const [errors, setErrors]           = useState<Partial<FormState>>({})
-  const [loading, setLoading]         = useState(false)
-  const [success, setSuccess]         = useState(false)
-  const [takenCombos, setTakenCombos] = useState<TakenCombo[]>([])
-  const [loadingMatrix, setLoadingMatrix] = useState(true)
-
-  // Fetch taken combos on mount + poll every 30s for live sync with sheet
-  useEffect(() => {
-    const fetchTaken = () =>
-      fetch('/api/taken')
-        .then(r => r.json())
-        .then(d => setTakenCombos(d.taken || []))
-        .catch(() => {})
-        .finally(() => setLoadingMatrix(false))
-
-    fetchTaken()
-    const interval = setInterval(fetchTaken, 30_000)
-    return () => clearInterval(interval)
-  }, [])
+  const [form, setForm]     = useState<FormState>(INITIAL)
+  const [errors, setErrors] = useState<Partial<FormState>>({})
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   const handleCommitteeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setForm(p => ({ ...p, committeePreference: e.target.value, portfolioPreference: '' }))
-    setErrors(p => ({ ...p, committeePreference: undefined, portfolioPreference: undefined }))
-  }
-
-  const isPortfolioTaken = (portfolio: string) => {
-    if (!form.committeePreference) return false
-    return takenCombos.some(
-      c => c.committee === form.committeePreference && c.country === portfolio
-    )
+    setForm(p => ({ ...p, committeePreference: e.target.value, portfolio1: '', portfolio2: '', portfolio3: '' }))
+    setErrors(p => ({ ...p, committeePreference: undefined, portfolio1: undefined, portfolio2: undefined, portfolio3: undefined }))
   }
 
   const set = (k: keyof FormState) =>
@@ -250,10 +225,16 @@ export default function Application() {
     if (!form.phone.match(/^\+?[\d\s\-()]{8,15}$/))      e.phone = 'Enter a valid phone number.'
     if (!form.institution.trim())                         e.institution = 'Institution name is required.'
     if (!form.committeePreference)                        e.committeePreference = 'Please select a committee.'
-    if (!form.portfolioPreference)                        e.portfolioPreference = 'Please select a portfolio.'
-    if (form.portfolioPreference && isPortfolioTaken(form.portfolioPreference))
-      e.portfolioPreference = 'This portfolio is already taken for the selected committee.'
-    if (!form.hasMunExperience)                           e.hasMunExperience = 'Please select an option.'
+    if (!form.portfolio1)                                 e.portfolio1 = 'Please select your 1st preference.'
+    if (!form.portfolio2)                                 e.portfolio2 = 'Please select your 2nd preference.'
+    if (!form.portfolio3)                                 e.portfolio3 = 'Please select your 3rd preference.'
+    if (form.portfolio1 && form.portfolio2 && form.portfolio1 === form.portfolio2)
+      e.portfolio2 = '2nd preference must differ from 1st.'
+    if (form.portfolio1 && form.portfolio3 && form.portfolio1 === form.portfolio3)
+      e.portfolio3 = '3rd preference must differ from 1st.'
+    if (form.portfolio2 && form.portfolio3 && form.portfolio2 === form.portfolio3)
+      e.portfolio3 = '3rd preference must differ from 2nd.'
+    if (!form.hasMunExperience) e.hasMunExperience = 'Please select an option.'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -264,60 +245,56 @@ export default function Application() {
     setLoading(true)
 
     try {
-      const payload = {
-        'Full Name':          form.fullName,
-        'Email':              form.email,
-        'Phone':              form.phone,
-        'Institution':        form.institution,
-        'Committee':          form.committeePreference,
-        'Portfolio':          form.portfolioPreference,
-        'MUN Experience':     form.hasMunExperience === 'yes' ? 'Yes' : 'No',
-        'Experience Details': form.munExperienceDetails || '—',
-      }
-
-      // Send to Formspree (email notification)
       const res = await fetch('https://formspree.io/f/mgoryngd', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body:    JSON.stringify(payload),
+        body: JSON.stringify({
+          'Full Name':            form.fullName,
+          'Email':                form.email,
+          'Phone':                form.phone,
+          'Institution':          form.institution,
+          'Committee':            form.committeePreference,
+          '1st Portfolio Choice': form.portfolio1,
+          '2nd Portfolio Choice': form.portfolio2,
+          '3rd Portfolio Choice': form.portfolio3,
+          'MUN Experience':       form.hasMunExperience === 'yes' ? 'Yes' : 'No',
+          'Experience Details':   form.munExperienceDetails || '—',
+        }),
       })
       const data = await res.json()
-
       if (res.ok) {
-        // Also log to Google Sheet for taken tracking (fire and forget)
-        fetch('/api/submit', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(payload),
-        }).catch(() => {})
-
-        setTakenCombos(prev => [
-          ...prev,
-          { committee: form.committeePreference, country: form.portfolioPreference },
-        ])
         setSuccess(true)
         setForm(INITIAL)
       } else {
-        setErrors(p => ({ ...p, portfolioPreference: data?.errors?.[0]?.message || 'Submission failed.' }))
+        setErrors(p => ({ ...p, portfolio1: data?.errors?.[0]?.message || 'Submission failed. Please try again.' }))
       }
     } catch {
-      setErrors(p => ({ ...p, portfolioPreference: 'Submission failed. Please try again.' }))
+      setErrors(p => ({ ...p, portfolio1: 'Submission failed. Please try again.' }))
     } finally {
       setLoading(false)
     }
   }
 
-  const currentPortfolios = form.committeePreference
-    ? committeePortfolios[form.committeePreference] ?? []
-    : []
+  const portfolios    = form.committeePreference ? committeePortfolios[form.committeePreference] ?? [] : []
+  const currentLabel  = form.committeePreference ? portfolioLabel[form.committeePreference] : 'Portfolio'
 
-  const currentLabel = form.committeePreference
-    ? portfolioLabel[form.committeePreference]
-    : 'Portfolio Preference'
-
-  const takenForCommittee = form.committeePreference
-    ? takenCombos.filter(c => c.committee === form.committeePreference).map(c => c.country)
-    : []
+  const PortfolioSelect = ({ field, rank, exclude }: { field: 'portfolio1'|'portfolio2'|'portfolio3'; rank: string; exclude: string[] }) => (
+    <Field label={`${rank} Choice — ${currentLabel}`} required error={errors[field]}>
+      <select
+        value={form[field]}
+        onChange={set(field)}
+        disabled={!form.committeePreference}
+        className={`form-input ${errors[field] ? 'border-rose-900/60' : ''} disabled:opacity-40 disabled:cursor-not-allowed`}
+      >
+        <option value="">{!form.committeePreference ? 'Select a committee first' : `Select ${rank.toLowerCase()} choice`}</option>
+        {portfolios.map(p => (
+          <option key={p} value={p} disabled={exclude.includes(p) && form[field] !== p}>
+            {exclude.includes(p) && form[field] !== p ? `— ${p}` : p}
+          </option>
+        ))}
+      </select>
+    </Field>
+  )
 
   return (
     <section id="apply" className="relative py-20 md:py-40 px-4 sm:px-6 bg-[#0a0d12]">
@@ -423,55 +400,29 @@ export default function Application() {
                 </Field>
               </div>
 
-              {/* Row 3 — Committee first, then Portfolio */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <Field label="Committee Preference" required error={errors.committeePreference}>
-                  <select
-                    value={form.committeePreference}
-                    onChange={handleCommitteeChange}
-                    className={`form-input ${errors.committeePreference ? 'border-rose-900/60' : ''}`}
-                  >
-                    <option value="">Select a committee</option>
-                    {committeeOptions.map((c) => (
-                      <option key={c.value} value={c.value}>{c.label}</option>
-                    ))}
-                  </select>
-                </Field>
+              {/* Row 3 — Committee */}
+              <Field label="Committee Preference" required error={errors.committeePreference}>
+                <select
+                  value={form.committeePreference}
+                  onChange={handleCommitteeChange}
+                  className={`form-input ${errors.committeePreference ? 'border-rose-900/60' : ''}`}
+                >
+                  <option value="">Select a committee</option>
+                  {committeeOptions.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </Field>
 
-                <Field label={currentLabel} required error={errors.portfolioPreference}>
-                  <select
-                    value={form.portfolioPreference}
-                    onChange={set('portfolioPreference')}
-                    disabled={!form.committeePreference || loadingMatrix}
-                    className={`form-input ${errors.portfolioPreference ? 'border-rose-900/60' : ''} disabled:opacity-40 disabled:cursor-not-allowed`}
-                  >
-                    <option value="">
-                      {!form.committeePreference
-                        ? 'Select a committee first'
-                        : loadingMatrix
-                        ? 'Loading availability…'
-                        : `Select ${currentLabel.toLowerCase()}`}
-                    </option>
-                    {currentPortfolios.map((p) => {
-                      const taken = isPortfolioTaken(p)
-                      return (
-                        <option key={p} value={p} disabled={taken}>
-                          {taken ? `⛔ ${p} — Taken` : p}
-                        </option>
-                      )
-                    })}
-                  </select>
-
-                  {form.committeePreference && takenForCommittee.length > 0 && (
-                    <div className="flex items-start gap-1.5 mt-1.5">
-                      <Lock size={10} className="text-[#475569] mt-0.5 shrink-0" />
-                      <p className="font-inter text-[9px] text-[#475569] leading-relaxed">
-                        <span className="text-[#5a8a8a]">{takenForCommittee.length} taken</span>
-                        {' '}in {form.committeePreference}
-                      </p>
-                    </div>
-                  )}
-                </Field>
+              {/* Portfolio Preferences */}
+              <div className="space-y-3">
+                <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
+                  Portfolio Preferences <span className="text-[#5a8a8a]">*</span>
+                  <span className="ml-2 normal-case font-normal text-[#333]">— rank your top 3, we'll allot one</span>
+                </p>
+                <PortfolioSelect field="portfolio1" rank="1st" exclude={[form.portfolio2, form.portfolio3].filter(Boolean)} />
+                <PortfolioSelect field="portfolio2" rank="2nd" exclude={[form.portfolio1, form.portfolio3].filter(Boolean)} />
+                <PortfolioSelect field="portfolio3" rank="3rd" exclude={[form.portfolio1, form.portfolio2].filter(Boolean)} />
               </div>
 
               {/* MUN Experience */}
