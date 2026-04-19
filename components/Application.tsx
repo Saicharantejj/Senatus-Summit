@@ -374,16 +374,24 @@ export default function Application() {
 
         {/* Delegate Fees */}
         <motion.div {...fadeUp(0.15)} className="mb-10">
-          <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569] mb-4">
-            Delegate Fees
-          </p>
+          <div className="flex items-center gap-3 mb-4">
+            <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
+              Delegate Fees
+            </p>
+            <span className="font-inter text-[7px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full border border-[#2c5f5d]/40 text-[#3d8a87] bg-[#0e1a1a]">
+              🐦 Early Bird — Ends May 5
+            </span>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="card rounded-xl p-5 flex items-center gap-4">
               <div className="flex flex-col gap-1 flex-1">
                 <span className="font-inter text-[8px] font-bold tracking-[0.18em] uppercase text-[#475569]">
                   UNGA · UNCSW · UNHRC · AIPPM · FIA
                 </span>
-                <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,900</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,800</span>
+                  <span className="font-inter text-[9px] text-[#333] line-through">₹1,900</span>
+                </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
             </div>
@@ -392,7 +400,10 @@ export default function Application() {
                 <span className="font-inter text-[8px] font-bold tracking-[0.18em] uppercase text-[#475569]">
                   International Press (IP)
                 </span>
-                <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,800</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,700</span>
+                  <span className="font-inter text-[9px] text-[#333] line-through">₹1,800</span>
+                </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
             </div>
