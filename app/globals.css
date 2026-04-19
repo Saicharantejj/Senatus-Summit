@@ -54,27 +54,38 @@ section { overflow-x: hidden; }
 
 /* ─── Buttons ───────────────────────────────────────────── */
 .btn-primary {
-  background: var(--accent);
-  color: var(--text-1);
-  border: 1px solid var(--accent);
-  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #1f5a58 0%, #2c5f5d 60%, #245856 100%);
+  color: #c8e6e5;
+  border: 1px solid #2c5f5d;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 .btn-primary:hover {
-  background: var(--accent-light);
-  border-color: var(--accent-light);
-  box-shadow: 0 0 20px var(--accent-glow);
+  background: linear-gradient(135deg, #28706d 0%, #3d8a87 50%, #2e7572 100%);
+  border-color: #5aafab;
+  color: #ffffff;
+  box-shadow:
+    0 0 0 1px #3d8a8740,
+    0 0 18px #2c5f5d70,
+    0 0 45px #2c5f5d28,
+    inset 0 1px 0 rgba(255,255,255,0.10);
 }
 
 .btn-outline {
   background: transparent;
   border: 1px solid var(--border);
-  color: var(--text-2);
-  transition: all 0.25s ease;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 .btn-outline:hover {
-  border-color: var(--accent);
-  color: var(--text-1);
-  box-shadow: 0 0 16px var(--accent-glow);
+  background: linear-gradient(135deg, #0a1a1a 0%, #0e2020 100%);
+  border-color: #3d7d7b;
+  color: #7abfbd;
+  box-shadow:
+    0 0 0 1px #2c5f5d25,
+    0 0 22px #2c5f5d45,
+    inset 0 0 24px #2c5f5d0a;
 }
 
 /* ─── Form Inputs ───────────────────────────────────────── */
