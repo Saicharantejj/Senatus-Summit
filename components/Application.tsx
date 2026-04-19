@@ -389,7 +389,7 @@ export default function Application() {
                   UNGA · UNCSW · UNHRC · AIPPM · FIA
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,800</span>
+                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,750</span>
                   <span className="font-inter text-[9px] text-[#333] line-through">₹1,900</span>
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
