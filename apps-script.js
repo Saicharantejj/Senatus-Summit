@@ -12,19 +12,21 @@
 //  6. Copy the Web App URL → paste into .env.local as APPS_SCRIPT_URL
 // ─────────────────────────────────────────────────────────────
 
+const SHEET_ID       = '1Bbt_QVvtoTVvc9HE9Wc4h1V-Q2XABCW2kK6JUriq7fE'
 const APP_SHEET      = 'Applications'
 const PAY_SHEET      = 'Payments'
 const STATUS_ALLOTED = 'Alloted'
 const DRIVE_FOLDER   = 'Senatus Summit 2026 — Payment Screenshots'
 
-function getAppSheet()            { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(APP_SHEET) }
-function getPaySheet()            { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(PAY_SHEET) }
-function getCommitteeSheet(name)  { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name) }
+function getSS()                  { return SpreadsheetApp.openById(SHEET_ID) }
+function getAppSheet()            { return getSS().getSheetByName(APP_SHEET) }
+function getPaySheet()            { return getSS().getSheetByName(PAY_SHEET) }
+function getCommitteeSheet(name)  { return getSS().getSheetByName(name) }
 
 // ─── ONE-TIME SETUP ──────────────────────────────────────────
 // Run this once after pasting the script. Creates all sheets with headers + formatting.
 function setup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet()
+  const ss = getSS()
   ss.setName('Senatus Summit 2026 — Applications')
 
   // ── Applications log ──
@@ -105,7 +107,7 @@ function styleHeaderRow(sheet, numCols, bgColor, fontColor) {
 
 // ─── ENSURE HEADERS (runtime guard) ─────────────────────────
 function ensureHeaders() {
-  const ss  = SpreadsheetApp.getActiveSpreadsheet()
+  const ss  = getSS()
   // Applications
   let sheet = ss.getSheetByName(APP_SHEET)
   if (!sheet) sheet = ss.insertSheet(APP_SHEET)

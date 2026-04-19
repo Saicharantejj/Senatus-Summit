@@ -4,17 +4,17 @@
 
 /* ─── Design Tokens ────────────────────────────────────── */
 :root {
-  --bg:         #0a0d12; /* Muted Dark Blue-Black */
-  --surface:    #0f141a; /* Section Background */
-  --surface-2:  #151c24; /* Card Background */
-  --border:     #1c232b; /* Subtle Border */
-  --accent:     #2c5f5d; /* Calmer, Desaturated Teal */
-  --accent-light: #3a7a78;
-  --text-1:     #e5e7eb; /* Soft White */
-  --text-2:     #94a3b8; /* Muted Slate Gray */
-  --text-3:     #475569; /* Extra Muted */
-  
-  --shadow-none: none;
+  --bg:           #080b10;
+  --surface:      #0d1117;
+  --surface-2:    #111720;
+  --border:       #1c232b;
+  --border-glow:  #2c5f5d40;
+  --accent:       #2c5f5d;
+  --accent-light: #3d7d7b;
+  --accent-glow:  #2c5f5d30;
+  --text-1:       #e8e6e1;
+  --text-2:       #94a3b8;
+  --text-3:       #475569;
 }
 
 /* ─── Base ──────────────────────────────────────────────── */
@@ -32,51 +32,52 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Ensure sections don't overflow on mobile */
 section { overflow-x: hidden; }
 
 /* ─── Scrollbar ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #1c232b; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
-/* ─── Professional Card Style (Flat) ────────────────────── */
+/* ─── Card ───────────────────────────────────────────────── */
 .card {
   background: var(--surface-2);
   border: 1px solid var(--border);
-  transition: all 0.25s ease;
-  box-shadow: none;
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  border-color: #2a3541;
-  background: #1a232d;
+  border-color: var(--accent);
+  background: #131c26;
+  box-shadow: 0 0 24px var(--accent-glow), 0 4px 32px rgba(0,0,0,0.4);
 }
 
-/* ─── Buttons — Minimal & Flat ──────────────────────────── */
+/* ─── Buttons ───────────────────────────────────────────── */
 .btn-primary {
   background: var(--accent);
   color: var(--text-1);
   border: 1px solid var(--accent);
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 .btn-primary:hover {
   background: var(--accent-light);
   border-color: var(--accent-light);
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
 .btn-outline {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text-2);
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 .btn-outline:hover {
-  border-color: var(--text-2);
+  border-color: var(--accent);
   color: var(--text-1);
+  box-shadow: 0 0 16px var(--accent-glow);
 }
 
-/* ─── Form Inputs — Clean Style ─────────────────────────── */
+/* ─── Form Inputs ───────────────────────────────────────── */
 .form-input {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -91,14 +92,54 @@ section { overflow-x: hidden; }
 .form-input:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-/* ─── Section Layouts ───────────────────────────────────── */
-.section-muted {
-  background: var(--surface);
+/* ─── Section Label ─────────────────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-inter);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  padding: 0.25rem 0.85rem;
+  border-left: 2px solid var(--accent);
+  background: linear-gradient(90deg, var(--accent-glow), transparent);
 }
 
-/* ─── 3D Card Flip — Flattened Tone ─────────────────────── */
+/* ─── Gradient Text ─────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #e8e6e1 0%, #94a3b8 50%, #5a8a8a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-accent {
+  background: linear-gradient(135deg, #3d7d7b 0%, #5a9e9c 50%, #7abfbd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glow Orbs ─────────────────────────────────────────── */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* ─── Dot Grid ──────────────────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(circle, #1c232b 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── 3D Card Flip ───────────────────────────────────────── */
 .perspective-card { perspective: 2000px; }
 .preserve-3d { transform-style: preserve-3d; }
 .backface-hidden {
@@ -107,22 +148,25 @@ section { overflow-x: hidden; }
 }
 .rotate-y-180 { transform: rotateY(180deg); }
 
-/* ─── Section Label ─────────────────────────────────────── */
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-inter);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  padding: 0.2rem 0.75rem;
-  border-left: 2px solid var(--accent);
-  background: transparent;
+/* ─── Marquee ───────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 50s linear infinite; }
+
+/* ─── Shimmer ───────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer-line {
+  background: linear-gradient(90deg, var(--border) 25%, #2c5f5d50 50%, var(--border) 75%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
 }
 
-/* ─── Divider Ornament ──────────────────────────────────── */
+/* ─── Divider ───────────────────────────────────────────── */
 .divider-ornament {
   display: flex;
   align-items: center;
@@ -134,13 +178,5 @@ section { overflow-x: hidden; }
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--border);
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
 }
-
-/* ─── Marquee ───────────────────────────────────────────── */
-@keyframes marquee {
-  0%   { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-.animate-marquee { animation: marquee 50s linear infinite; }
-

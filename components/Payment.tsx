@@ -1,15 +1,23 @@
 'use client'
 
-import { useState, useRef, type ChangeEvent } from 'react'
+import { useState, useRef, useEffect, useCallback, type ChangeEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Upload, CheckCircle, Loader2, ImageIcon, X } from 'lucide-react'
+import { Upload, CheckCircle, Loader2, X, QrCode, Timer } from 'lucide-react'
 import Image from 'next/image'
+
+const TIMER_SECONDS = 180 // 3 minutes
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.8, delay, ease: 'easeOut' },
 })
+
+function formatTime(s: number) {
+  const m = Math.floor(s / 60)
+  const sec = s % 60
+  return `${m}:${String(sec).padStart(2, '0')}`
+}
 
 export default function Payment() {
   const [name, setName]           = useState('')
@@ -19,7 +27,43 @@ export default function Payment() {
   const [loading, setLoading]     = useState(false)
   const [success, setSuccess]     = useState(false)
   const [error, setError]         = useState('')
-  const inputRef                  = useRef<HTMLInputElement>(null)
+
+  // QR reveal state
+  const [qrVisible, setQrVisible]   = useState(false)
+  const [timeLeft, setTimeLeft]     = useState(TIMER_SECONDS)
+  const [timerActive, setTimerActive] = useState(false)
+  const timerRef                    = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = null
+    setTimerActive(false)
+  }, [])
+
+  const startQr = () => {
+    setQrVisible(true)
+    setTimeLeft(TIMER_SECONDS)
+    setTimerActive(true)
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          stopTimer()
+          setQrVisible(false)
+          return TIMER_SECONDS
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  useEffect(() => () => stopTimer(), [stopTimer])
+
+  const timerColor =
+    timeLeft > 90 ? '#2c5f5d' :
+    timeLeft > 45 ? '#b45309' :
+    '#e11d48'
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
@@ -35,12 +79,11 @@ export default function Payment() {
   const handleSubmit = async () => {
     if (!name.trim())  { setError('Please enter your name.'); return }
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) { setError('Please enter a valid email.'); return }
-    if (!file)         { setError('Please upload your payment screenshot.'); return }
+    if (!file)         { setError('Screenshot is required — please upload your payment proof before submitting.'); return }
     setError('')
     setLoading(true)
 
     try {
-      // Convert file to base64
       const base64 = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
         reader.onload  = () => resolve((reader.result as string).split(',')[1])
@@ -58,6 +101,7 @@ export default function Payment() {
       if (data.success) {
         setSuccess(true)
         setName(''); setEmail(''); setFile(null); setPreview(null)
+        stopTimer(); setQrVisible(false)
       } else {
         setError(data.error || 'Submission failed. Please try again.')
       }
@@ -72,49 +116,108 @@ export default function Payment() {
     <section id="payment" className="relative py-20 md:py-32 px-4 sm:px-6 border-t border-[#1c232b] bg-[#0a0d12]">
       <div className="max-w-4xl mx-auto">
 
+        {/* Header */}
         <motion.div {...fadeUp(0)} className="mb-14 text-center">
           <div className="section-label mb-6 mx-auto">Registration Fee</div>
           <h2 className="font-cinzel font-bold text-3xl md:text-5xl text-[#e5e7eb] leading-tight mb-4">
             Secure Your Seat
           </h2>
           <p className="font-inter text-[#475569] text-sm max-w-md mx-auto">
-            Scan the QR code to pay the registration fee, then upload your payment screenshot below.
+            Click to reveal the payment QR code, complete your payment, then upload the screenshot below.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 
-          {/* QR Code */}
+          {/* ── QR Panel ── */}
           <motion.div {...fadeUp(0.1)} className="card rounded-2xl p-8 flex flex-col items-center gap-6">
-            <div className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">Scan to Pay</div>
 
-            {/* QR code image — drop QR.png into your senatus-summit folder */}
-            <div className="w-52 h-52 rounded-xl border border-[#1c232b] bg-[#151c24] flex items-center justify-center overflow-hidden">
-              <Image
-                src="/qr.png"
-                alt="Payment QR Code"
-                width={208}
-                height={208}
-                className="object-contain"
-                onError={(e) => {
-                  // Show placeholder if QR not uploaded yet
-                  (e.target as HTMLImageElement).style.display = 'none'
-                }}
-              />
-              {/* Placeholder shown until QR.png is added */}
-              <div className="absolute flex flex-col items-center gap-2 text-[#1c232b]">
-                <ImageIcon size={40} />
-                <span className="font-inter text-[9px] tracking-widest uppercase">QR Coming Soon</span>
-              </div>
-            </div>
+            <div className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">PhonePe / UPI</div>
+
+            <AnimatePresence mode="wait">
+              {qrVisible ? (
+                /* QR revealed + timer */
+                <motion.div
+                  key="qr-shown"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col items-center gap-4 w-full"
+                >
+                  {/* Timer bar */}
+                  <div className="w-full flex items-center justify-between px-1">
+                    <span className="font-inter text-[9px] tracking-widest uppercase text-[#475569] flex items-center gap-1">
+                      <Timer size={10} /> QR expires in
+                    </span>
+                    <span className="font-cinzel font-bold text-sm" style={{ color: timerColor }}>
+                      {formatTime(timeLeft)}
+                    </span>
+                  </div>
+
+                  {/* Timer progress bar */}
+                  <div className="w-full h-px bg-[#1c232b] rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: timerColor }}
+                      animate={{ width: `${(timeLeft / TIMER_SECONDS) * 100}%` }}
+                      transition={{ duration: 0.9, ease: 'linear' }}
+                    />
+                  </div>
+
+                  {/* QR image */}
+                  <div className="w-52 h-52 rounded-xl border border-[#1c232b] bg-[#151c24] overflow-hidden flex items-center justify-center">
+                    <Image
+                      src="/qr.png"
+                      alt="PhonePe Payment QR"
+                      width={208}
+                      height={208}
+                      className="object-contain"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => { stopTimer(); setQrVisible(false) }}
+                    className="font-inter text-[9px] tracking-[0.15em] uppercase text-[#333] hover:text-[#475569] transition-colors"
+                  >
+                    Hide QR
+                  </button>
+                </motion.div>
+              ) : (
+                /* Reveal button */
+                <motion.div
+                  key="qr-hidden"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col items-center gap-5"
+                >
+                  {/* Blurred placeholder */}
+                  <div className="relative w-52 h-52 rounded-xl border border-[#1c232b] bg-[#0d1117] overflow-hidden flex items-center justify-center">
+                    <div className="absolute inset-0 bg-[#0a0d12]/80 backdrop-blur-sm z-10" />
+                    <QrCode size={72} className="text-[#1c232b] absolute" />
+                    <div className="relative z-20 flex flex-col items-center gap-2">
+                      <button
+                        onClick={startQr}
+                        className="btn-primary font-inter font-bold tracking-[0.12em] uppercase text-[10px] px-6 py-2.5 rounded-lg flex items-center gap-2"
+                      >
+                        <QrCode size={13} />
+                        Reveal QR Code
+                      </button>
+                      <span className="font-inter text-[8px] text-[#333] tracking-wide">3 min timer starts on reveal</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="text-center">
-              <p className="font-cinzel font-bold text-lg text-[#2c5f5d]">UPI / Bank Transfer</p>
+              <p className="font-cinzel font-bold text-base text-[#2c5f5d]">Scan & Pay via PhonePe</p>
               <p className="font-inter text-[10px] text-[#475569] mt-1 tracking-wide">After payment, upload screenshot →</p>
             </div>
           </motion.div>
 
-          {/* Upload form */}
+          {/* ── Upload Form ── */}
           <motion.div {...fadeUp(0.2)} className="card rounded-2xl p-6 sm:p-8">
             <AnimatePresence mode="wait">
               {success ? (
@@ -167,10 +270,10 @@ export default function Payment() {
                     />
                   </div>
 
-                  {/* File upload */}
+                  {/* File upload — REQUIRED */}
                   <div className="flex flex-col gap-1.5">
                     <label className="font-inter text-[9px] font-semibold tracking-[0.14em] uppercase text-[#484440]">
-                      Payment Screenshot <span className="text-[#5a8a8a]">*</span>
+                      Payment Screenshot <span className="text-rose-500">* Required</span>
                     </label>
                     <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
 
@@ -183,13 +286,20 @@ export default function Payment() {
                         >
                           <X size={12} />
                         </button>
+                        <div className="absolute bottom-2 left-2 font-inter text-[8px] bg-[#0e1a1a] border border-[#1e3232] text-[#5a8a8a] px-2 py-0.5 rounded tracking-wide">
+                          ✓ Screenshot attached
+                        </div>
                       </div>
                     ) : (
                       <button
                         onClick={() => inputRef.current?.click()}
-                        className="w-full border border-dashed border-[#1c232b] rounded-lg p-8 flex flex-col items-center gap-3 hover:border-[#2c5f5d] transition-colors group"
+                        className={`w-full border border-dashed rounded-lg p-8 flex flex-col items-center gap-3 transition-colors group ${
+                          error && !file
+                            ? 'border-rose-900/60 bg-rose-950/10'
+                            : 'border-[#1c232b] hover:border-[#2c5f5d]'
+                        }`}
                       >
-                        <Upload size={22} className="text-[#1c232b] group-hover:text-[#2c5f5d] transition-colors" />
+                        <Upload size={22} className={`transition-colors ${error && !file ? 'text-rose-900/60' : 'text-[#1c232b] group-hover:text-[#2c5f5d]'}`} />
                         <span className="font-inter text-[10px] text-[#333] tracking-wide">Tap to upload screenshot</span>
                         <span className="font-inter text-[9px] text-[#222]">JPG, PNG up to 5 MB</span>
                       </button>
@@ -198,13 +308,26 @@ export default function Payment() {
 
                   {error && <p className="font-inter text-[11px] text-rose-500/80">{error}</p>}
 
+                  {/* Submit — disabled until screenshot attached */}
                   <button
                     onClick={handleSubmit}
-                    disabled={loading}
+                    disabled={loading || !file}
                     className="btn-primary w-full py-3.5 rounded-md font-cinzel font-medium tracking-[0.15em] text-xs flex items-center justify-center gap-2.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                    title={!file ? 'Upload your payment screenshot to continue' : ''}
                   >
-                    {loading ? <><Loader2 size={14} className="animate-spin" /> Uploading…</> : 'Submit Payment Proof'}
+                    {loading
+                      ? <><Loader2 size={14} className="animate-spin" /> Uploading…</>
+                      : !file
+                        ? 'Upload Screenshot to Continue'
+                        : 'Submit Payment Proof'
+                    }
                   </button>
+
+                  {!file && (
+                    <p className="font-inter text-[9px] text-[#333] text-center tracking-wide">
+                      Screenshot upload is mandatory to submit
+                    </p>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

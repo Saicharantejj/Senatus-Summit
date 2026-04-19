@@ -19,9 +19,9 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
         width: 'clamp(60px, 16vw, 80px)',
         height: 'clamp(60px, 16vw, 80px)',
         borderRadius: 'clamp(16px, 4vw, 22px)',
-        background: 'linear-gradient(160deg, #1a232d 0%, #111820 100%)',
+        background: 'linear-gradient(160deg, #131c26 0%, #0d1117 100%)',
         border: '1px solid #1c232b',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)',
+        boxShadow: '0 0 20px rgba(44,95,93,0.15), 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
       }}
     >
       <div className="font-cinzel font-semibold text-xl sm:text-2xl md:text-3xl text-[#dedad4] leading-none mb-1">
@@ -91,10 +91,18 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0a0d12]">
-      {/* Muted Border Accents */}
-      <div className="absolute inset-x-0 top-[20%] h-px bg-[#1c232b]/50" />
-      <div className="absolute inset-x-0 bottom-[20%] h-px bg-[#1c232b]/50" />
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#080b10]">
+      {/* Dot grid */}
+      <div className="absolute inset-0 dot-grid opacity-40" />
+
+      {/* Glow orbs */}
+      <div className="glow-orb w-[600px] h-[600px] bg-[#2c5f5d] opacity-[0.07] top-[-100px] left-1/2 -translate-x-1/2" />
+      <div className="glow-orb w-[300px] h-[300px] bg-[#3d7d7b] opacity-[0.06] bottom-[10%] left-[10%]" />
+      <div className="glow-orb w-[250px] h-[250px] bg-[#2c5f5d] opacity-[0.05] top-[30%] right-[5%]" />
+
+      {/* Horizontal accent lines */}
+      <div className="absolute inset-x-0 top-[22%] h-px shimmer-line opacity-30" />
+      <div className="absolute inset-x-0 bottom-[22%] h-px shimmer-line opacity-20" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-32 pb-20 max-w-5xl mx-auto w-full">
@@ -104,13 +112,13 @@ export default function Hero() {
         </motion.div>
 
         <motion.div {...fadeUp(0.25)} className="mb-10">
-          <h1 className="font-cinzel font-bold text-[11vw] sm:text-[10vw] md:text-[80px] lg:text-[92px] leading-[0.9] tracking-[0.05em] text-[#e5e7eb]">
-            THE<br />
-            <span className="tracking-[0.04em] sm:tracking-[0.10em] md:tracking-[0.16em]">SENATUS SUMMIT</span>
+          <h1 className="font-cinzel font-bold text-[11vw] sm:text-[10vw] md:text-[80px] lg:text-[92px] leading-[0.9] tracking-[0.05em]">
+            <span className="gradient-text">THE</span><br />
+            <span className="gradient-text tracking-[0.04em] sm:tracking-[0.10em] md:tracking-[0.16em]">SENATUS SUMMIT</span>
           </h1>
         </motion.div>
 
-        <motion.div {...fadeUp(0.4)} className="w-24 h-px bg-[#1c232b] my-8" />
+        <motion.div {...fadeUp(0.4)} className="w-32 h-px shimmer-line my-8" />
 
         <motion.p {...fadeUp(0.5)} className="font-inter font-semibold text-[10px] md:text-xs tracking-[0.4em] uppercase text-[#475569] mb-4">
           Where Debate Meets Diplomacy

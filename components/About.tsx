@@ -32,11 +32,13 @@ function StatCard({ value, suffix, label, inView }: typeof stats[0] & { inView: 
   }, [inView, value])
 
   return (
-    <div className="card rounded p-6 md:p-10 flex flex-col items-center text-center">
-      <div className="font-cinzel font-bold text-3xl md:text-4xl text-[#2c5f5d] mb-2 tracking-wider">
+    <div className="card rounded-xl p-6 md:p-10 flex flex-col items-center text-center relative overflow-hidden group">
+      {/* Glow on hover */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#2c5f5d08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="font-cinzel font-bold text-3xl md:text-5xl gradient-text-accent mb-2 tracking-wider relative z-10">
         {count}{suffix}
       </div>
-      <div className="font-inter text-[9px] text-[#475569] font-bold tracking-[0.2em] uppercase">{label}</div>
+      <div className="font-inter text-[9px] text-[#475569] font-bold tracking-[0.2em] uppercase relative z-10">{label}</div>
     </div>
   )
 }
@@ -51,14 +53,17 @@ export default function About() {
   ]
 
   return (
-    <section id="about" className="relative py-20 md:py-48 px-4 sm:px-6 border-t border-[#1c232b] bg-[#0f141a]">
+    <section id="about" className="relative py-20 md:py-48 px-4 sm:px-6 border-t border-[#1c232b] bg-[#0d1117]">
+      {/* Background glow */}
+      <div className="glow-orb w-[500px] h-[500px] bg-[#2c5f5d] opacity-[0.04] top-1/2 right-0 translate-x-1/2 -translate-y-1/2" />
+
       <div className="max-w-5xl mx-auto relative z-10">
 
         {/* Header */}
         <motion.div {...fadeUp(0)} className="mb-24">
           <div className="section-label mb-10">About the Summit</div>
-          <h2 className="font-cinzel font-bold text-4xl md:text-5xl lg:text-6xl text-[#e5e7eb] leading-tight">
-            Shaping Tomorrow&apos;s<br />
+          <h2 className="font-cinzel font-bold text-4xl md:text-5xl lg:text-6xl leading-tight">
+            <span className="gradient-text">Shaping Tomorrow&apos;s</span><br />
             <span className="text-[#1c232b]">Diplomats</span>
           </h2>
         </motion.div>
@@ -76,12 +81,12 @@ export default function About() {
           ))}
         </div>
 
-        {/* Tags — Minimal */}
-        <motion.div {...fadeUp(0.4)} className="flex flex-wrap gap-4 mb-32">
+        {/* Tags */}
+        <motion.div {...fadeUp(0.4)} className="flex flex-wrap gap-3 mb-32">
           {['Debate & Resolution', 'Diplomacy', 'Crisis Simulations', 'Global Affairs'].map((tag) => (
             <span
               key={tag}
-              className="font-inter text-[8px] font-bold px-5 py-2.5 rounded border border-[#1c232b] text-[#475569] tracking-[0.2em] uppercase bg-[#151c24]"
+              className="font-inter text-[8px] font-bold px-5 py-2.5 rounded-full border border-[#1c232b] text-[#475569] tracking-[0.2em] uppercase bg-[#0d1117] hover:border-[#2c5f5d] hover:text-[#5a8a8a] transition-colors duration-300 cursor-default"
             >
               {tag}
             </span>
