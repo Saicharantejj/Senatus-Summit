@@ -77,9 +77,9 @@ export default function About() {
         {/* Header */}
         <motion.div {...fadeUp(0)} className="mb-28">
           <div className="section-label mb-12">About the Summit</div>
-          <h2 className="font-cinzel font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight">
-            <span className="gradient-text">Shaping Tomorrow&apos;s</span><br />
-            <span className="text-[#1c232b] drop-shadow-[0_0_2px_rgba(44,95,93,0.3)]">Diplomats</span>
+          <h2 className="font-cinzel font-black text-4xl md:text-6xl lg:text-7xl leading-[0.9] tracking-tight">
+            <span className="gradient-text">Built for the Bold.</span><br />
+            <span className="text-[#1c232b] drop-shadow-[0_0_2px_rgba(44,95,93,0.3)]">Made for Leaders.</span>
           </h2>
         </motion.div>
 
