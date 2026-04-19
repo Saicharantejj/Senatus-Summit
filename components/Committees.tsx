@@ -182,7 +182,7 @@ function CommitteeCard({ committee, index }: { committee: Committee; index: numb
               boxShadow: `0 0 20px -5px ${committee.color}50`,
             }}
           >
-            Apply for this Arena →
+            Apply for this Committee →
           </Link>
         </div>
       </motion.div>
@@ -209,7 +209,7 @@ export default function Committees() {
           <div className="section-label mb-12">2026 Committees</div>
           <h2 className="font-cinzel font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight">
             <span className="gradient-text">Choose Your</span><br />
-            <span className="text-[#1c232b] drop-shadow-[0_0_2px_rgba(44,95,93,0.3)]">Arena</span>
+            <span className="text-[#1c232b] drop-shadow-[0_0_2px_rgba(44,95,93,0.3)]">Committee</span>
           </h2>
           <p className="font-inter text-[#475569] mt-10 max-w-xl text-xs leading-relaxed font-black uppercase tracking-[0.3em] opacity-80">
             Six specialized committees. Represent. Debate. Lead.
