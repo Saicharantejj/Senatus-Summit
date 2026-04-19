@@ -1,8 +1,14 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useRef, type FormEvent, type ChangeEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Loader2 } from 'lucide-react'
+import { CheckCircle, Loader2, Upload, X, QrCode, Timer } from 'lucide-react'
+import Image from 'next/image'
+
+const TIMER_SECONDS = 180
+function formatTime(s: number) {
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+}
 
 interface FormState {
   fullName: string
@@ -22,6 +28,24 @@ const INITIAL: FormState = {
   committeePreference: '',
   portfolio1: '', portfolio2: '', portfolio3: '',
   hasMunExperience: '', munExperienceDetails: '',
+}
+
+// ─── QR Timer Hook ───────────────────────────────────────────
+function useQrTimer() {
+  const [qrVisible, setQrVisible] = useState(false)
+  const [timeLeft, setTimeLeft]   = useState(TIMER_SECONDS)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const stop = () => { if (timerRef.current) clearInterval(timerRef.current); timerRef.current = null }
+  const start = () => {
+    stop(); setQrVisible(true); setTimeLeft(TIMER_SECONDS)
+    timerRef.current = setInterval(() => {
+      setTimeLeft(p => { if (p <= 1) { stop(); setQrVisible(false); return TIMER_SECONDS } return p - 1 })
+    }, 1000)
+  }
+  const hide = () => { stop(); setQrVisible(false) }
+  const color = timeLeft > 90 ? '#2c5f5d' : timeLeft > 45 ? '#b45309' : '#e11d48'
+  return { qrVisible, timeLeft, start, hide, color }
 }
 
 // ─── Per-committee portfolios ────────────────────────────────
@@ -202,10 +226,24 @@ function Field({
 }
 
 export default function Application() {
-  const [form, setForm]     = useState<FormState>(INITIAL)
-  const [errors, setErrors] = useState<Partial<FormState>>({})
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [form, setForm]         = useState<FormState>(INITIAL)
+  const [errors, setErrors]     = useState<Partial<FormState> & { screenshot?: string }>({})
+  const [loading, setLoading]   = useState(false)
+  const [success, setSuccess]   = useState(false)
+  const [screenshot, setScreenshot]   = useState<File | null>(null)
+  const [preview, setPreview]         = useState<string | null>(null)
+  const fileRef                       = useRef<HTMLInputElement>(null)
+  const qr                            = useQrTimer()
+
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0]
+    if (!f) return
+    if (f.size > 5 * 1024 * 1024) { setErrors(p => ({ ...p, screenshot: 'File must be under 5 MB.' })); return }
+    setScreenshot(f); setErrors(p => ({ ...p, screenshot: undefined }))
+    const reader = new FileReader()
+    reader.onload = () => setPreview(reader.result as string)
+    reader.readAsDataURL(f)
+  }
 
   const handleCommitteeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setForm(p => ({ ...p, committeePreference: e.target.value, portfolio1: '', portfolio2: '', portfolio3: '' }))
@@ -236,6 +274,10 @@ export default function Application() {
       e.portfolio3 = '3rd preference must differ from 2nd.'
     if (!form.hasMunExperience) e.hasMunExperience = 'Please select an option.'
     setErrors(e)
+    if (!screenshot) {
+      setErrors(prev => ({ ...prev, ...e, screenshot: 'Payment screenshot is required before submitting.' }))
+      return false
+    }
     return Object.keys(e).length === 0
   }
 
@@ -245,6 +287,22 @@ export default function Application() {
     setLoading(true)
 
     try {
+      // Upload screenshot to Google Drive (fire and forget)
+      if (screenshot) {
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload  = () => resolve((reader.result as string).split(',')[1])
+          reader.onerror = reject
+          reader.readAsDataURL(screenshot)
+        })
+        fetch('/api/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: form.fullName, email: form.email, fileName: screenshot.name, fileBase64: base64 }),
+        }).catch(() => {})
+      }
+
+      // Submit application to Formspree
       const res = await fetch('https://formspree.io/f/mgoryngd', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -259,17 +317,20 @@ export default function Application() {
           '3rd Portfolio Choice': form.portfolio3,
           'MUN Experience':       form.hasMunExperience === 'yes' ? 'Yes' : 'No',
           'Experience Details':   form.munExperienceDetails || '—',
+          'Payment Screenshot':   screenshot?.name ?? '—',
         }),
       })
       const data = await res.json()
       if (res.ok) {
         setSuccess(true)
         setForm(INITIAL)
+        setScreenshot(null); setPreview(null)
+        qr.hide()
       } else {
-        setErrors(p => ({ ...p, portfolio1: data?.errors?.[0]?.message || 'Submission failed. Please try again.' }))
+        setErrors(p => ({ ...p, screenshot: data?.errors?.[0]?.message || 'Submission failed. Please try again.' }))
       }
     } catch {
-      setErrors(p => ({ ...p, portfolio1: 'Submission failed. Please try again.' }))
+      setErrors(p => ({ ...p, screenshot: 'Submission failed. Please try again.' }))
     } finally {
       setLoading(false)
     }
@@ -464,15 +525,80 @@ export default function Application() {
                 </motion.div>
               )}
 
+              {/* ── Payment Section ── */}
+              <div className="border border-[#1c232b] rounded-xl p-5 space-y-4 bg-[#0d1117]">
+                <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
+                  Step — Pay Registration Fee
+                </p>
+
+                {/* QR Reveal */}
+                <div className="flex flex-col sm:flex-row gap-4 items-start">
+                  <div className="flex flex-col items-center gap-3">
+                    <AnimatePresence mode="wait">
+                      {qr.qrVisible ? (
+                        <motion.div key="qr-on" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-2">
+                          <div className="flex items-center justify-between w-full px-1">
+                            <span className="font-inter text-[8px] text-[#475569] flex items-center gap-1 uppercase tracking-widest"><Timer size={9} /> Expires in</span>
+                            <span className="font-cinzel font-bold text-xs" style={{ color: qr.color }}>{formatTime(qr.timeLeft)}</span>
+                          </div>
+                          <div className="w-full h-px bg-[#1c232b] rounded overflow-hidden">
+                            <motion.div className="h-full" style={{ backgroundColor: qr.color }} animate={{ width: `${(qr.timeLeft / TIMER_SECONDS) * 100}%` }} transition={{ duration: 0.9, ease: 'linear' }} />
+                          </div>
+                          <div className="w-40 h-40 rounded-lg overflow-hidden border border-[#1c232b] bg-white">
+                            <Image src="/qr.png" alt="UPI QR" width={160} height={160} className="object-contain w-full h-full" />
+                          </div>
+                          <button onClick={qr.hide} className="font-inter text-[8px] text-[#333] hover:text-[#475569] uppercase tracking-widest transition-colors">Hide</button>
+                        </motion.div>
+                      ) : (
+                        <motion.div key="qr-off" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-2">
+                          <div className="w-40 h-40 rounded-lg border border-dashed border-[#1c232b] bg-[#0a0d12] flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#2c5f5d] transition-colors group" onClick={qr.start}>
+                            <QrCode size={32} className="text-[#1c232b] group-hover:text-[#2c5f5d] transition-colors" />
+                            <span className="font-inter text-[8px] text-[#333] tracking-widest uppercase">Tap to reveal</span>
+                          </div>
+                          <button onClick={qr.start} className="btn-primary font-inter text-[9px] tracking-[0.12em] uppercase px-4 py-2 rounded-lg flex items-center gap-1.5">
+                            <QrCode size={11} /> Show QR Code
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Screenshot upload */}
+                  <div className="flex-1 flex flex-col gap-2">
+                    <label className="font-inter text-[9px] font-semibold tracking-[0.14em] uppercase text-[#484440]">
+                      Upload Payment Screenshot <span className="text-rose-500">* Required</span>
+                    </label>
+                    <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+                    {preview ? (
+                      <div className="relative rounded-lg overflow-hidden border border-[#1c232b]">
+                        <img src={preview} alt="preview" className="w-full object-cover max-h-40" />
+                        <button onClick={() => { setScreenshot(null); setPreview(null) }} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#0a0d12]/80 border border-[#1c232b] flex items-center justify-center text-[#475569] hover:text-white">
+                          <X size={10} />
+                        </button>
+                        <div className="absolute bottom-2 left-2 font-inter text-[8px] bg-[#0e1a1a] border border-[#1e3232] text-[#5a8a8a] px-2 py-0.5 rounded">✓ Screenshot attached</div>
+                      </div>
+                    ) : (
+                      <button onClick={() => fileRef.current?.click()} className={`w-full border border-dashed rounded-lg p-6 flex flex-col items-center gap-2 transition-colors group ${errors.screenshot ? 'border-rose-900/60 bg-rose-950/10' : 'border-[#1c232b] hover:border-[#2c5f5d]'}`}>
+                        <Upload size={18} className={errors.screenshot ? 'text-rose-900/60' : 'text-[#1c232b] group-hover:text-[#2c5f5d] transition-colors'} />
+                        <span className="font-inter text-[9px] text-[#333]">Tap to upload screenshot</span>
+                      </button>
+                    )}
+                    {errors.screenshot && <p className="font-inter text-[10px] text-rose-500/80">{errors.screenshot}</p>}
+                  </div>
+                </div>
+              </div>
+
               {/* Submit */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !screenshot}
                   className="btn-primary w-full py-3.5 rounded-md font-cinzel font-medium tracking-[0.15em] text-xs flex items-center justify-center gap-2.5 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <><Loader2 size={14} className="animate-spin" /> Submitting…</>
+                  ) : !screenshot ? (
+                    'Upload Payment Screenshot to Continue'
                   ) : (
                     'Submit Application'
                   )}
