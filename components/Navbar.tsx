@@ -53,47 +53,47 @@ export default function Navbar() {
       </div>
 
       <motion.nav
-        className={`fixed top-[31px] left-0 right-0 z-40 transition-all duration-500 ${
+        className={`fixed top-[31px] left-0 right-0 z-40 transition-all duration-700 ${
           scrolled
-            ? 'bg-[#080b10]/80 backdrop-blur-xl border-b border-[#1c232b]/60 py-2 shadow-[0_4px_32px_rgba(0,0,0,0.4)]'
+            ? 'bg-[#080b10]/80 backdrop-blur-2xl border-b border-[#1c232b] py-2 shadow-[0_8px_40px_rgba(0,0,0,0.5)]'
             : 'bg-transparent py-4'
         }`}
         initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[52px]">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[56px]">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-4 group">
             <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-[#2c5f5d] opacity-0 group-hover:opacity-20 blur-md transition-all duration-300 scale-150" />
+              <div className="absolute inset-[-10px] rounded-full bg-[#2c5f5d] opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500 scale-110" />
               <Image
                 src="/logo.png"
                 alt="The Senatus Summit"
-                width={40}
-                height={40}
-                className="rounded-full relative z-10 transition-transform duration-300 group-hover:scale-105"
+                width={42}
+                height={42}
+                className="rounded-full relative z-10 transition-transform duration-500 group-hover:rotate-[5deg]"
                 priority
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-cinzel font-bold text-[10px] tracking-[0.22em] text-[#e5e7eb] hidden sm:block group-hover:text-white transition-colors">
+              <span className="font-cinzel font-bold text-[11px] tracking-[0.25em] text-[#e5e7eb] hidden sm:block group-hover:text-white transition-colors duration-300">
                 SENATUS SUMMIT
               </span>
-              <span className="font-inter text-[7px] tracking-[0.12em] text-[#2c5f5d] hidden sm:block uppercase">2026 Edition</span>
+              <span className="font-inter text-[8px] tracking-[0.15em] text-[#2c5f5d] font-bold hidden sm:block uppercase opacity-80">2026 Edition</span>
             </div>
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-inter text-[11px] font-medium tracking-[0.14em] uppercase transition-all duration-200 relative pb-0.5 ${
+                className={`font-inter text-[11px] font-bold tracking-[0.16em] uppercase transition-all duration-300 relative pb-1 ${
                   isActive(link.href)
-                    ? 'text-[#e5e7eb]'
+                    ? 'text-white'
                     : 'text-[#475569] hover:text-[#94a3b8]'
                 }`}
               >
@@ -103,7 +103,7 @@ export default function Navbar() {
                     layoutId="nav-indicator"
                     className="absolute -bottom-0.5 left-0 right-0 h-px"
                     style={{ background: 'linear-gradient(90deg, transparent, #2c5f5d, transparent)' }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   />
                 )}
               </Link>
@@ -111,19 +111,19 @@ export default function Navbar() {
           </div>
 
           {/* CTA */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <Link
               href="/apply"
-              className="hidden md:block btn-primary font-inter font-semibold tracking-[0.12em] text-[10px] px-5 py-2.5 rounded-lg"
+              className="hidden md:block btn-primary font-inter font-bold tracking-[0.15em] text-[10px] px-6 py-3 rounded-full uppercase"
             >
               Apply Now
             </Link>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-[#475569] hover:text-[#e5e7eb] transition-colors p-1.5 rounded-lg border border-[#1c232b] hover:border-[#2c5f5d]"
+              className="md:hidden text-[#475569] hover:text-[#e5e7eb] transition-all duration-300 p-2 rounded-xl border border-[#1c232b] hover:border-[#2c5f5d]/50 bg-[#0d1117]/50"
               aria-label="Toggle menu"
             >
-              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
@@ -132,37 +132,43 @@ export default function Navbar() {
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="md:hidden overflow-hidden bg-[#080b10]/95 backdrop-blur-xl border-b border-[#1c232b]/60"
+              initial={{ opacity: 0, height: 0, y: -10 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden overflow-hidden bg-[#080b10]/95 backdrop-blur-3xl border-b border-[#1c232b]"
             >
-              <div className="px-6 py-5 flex flex-col gap-1">
+              <div className="px-6 py-8 flex flex-col gap-2">
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
                   >
                     <Link
                       href={link.href}
-                      className={`font-inter text-sm font-medium tracking-[0.1em] uppercase py-3 flex items-center gap-3 border-b border-[#1c232b]/50 last:border-0 transition-colors ${
-                        isActive(link.href) ? 'text-[#e5e7eb]' : 'text-[#475569] hover:text-[#94a3b8]'
+                      className={`font-inter text-sm font-bold tracking-[0.12em] uppercase py-4 flex items-center justify-between border-b border-[#1c232b]/30 last:border-0 transition-colors ${
+                        isActive(link.href) ? 'text-white' : 'text-[#475569] hover:text-[#94a3b8]'
                       }`}
                     >
-                      {isActive(link.href) && <span className="w-1.5 h-1.5 rounded-full bg-[#2c5f5d]" />}
-                      {link.label}
+                      <span>{link.label}</span>
+                      {isActive(link.href) && <span className="w-1.5 h-1.5 rounded-full bg-[#2c5f5d] shadow-[0_0_10px_#2c5f5d]" />}
                     </Link>
                   </motion.div>
                 ))}
-                <Link
-                  href="/apply"
-                  className="btn-primary font-inter font-semibold text-sm tracking-[0.1em] px-5 py-3 rounded-lg mt-3 text-center"
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
                 >
-                  Apply Now
-                </Link>
+                  <Link
+                    href="/apply"
+                    className="btn-primary font-inter font-bold text-sm tracking-[0.15em] px-5 py-4 rounded-xl mt-6 text-center uppercase"
+                  >
+                    Apply Now
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           )}

@@ -82,47 +82,55 @@ function CommitteeCard({ committee, index }: { committee: Committee; index: numb
 
   return (
     <motion.div
-      {...fadeUp(index * 0.08)}
-      className="perspective-card w-full cursor-pointer"
-      style={{ height: 'clamp(260px, 40vw, 310px)' }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="perspective-card w-full cursor-pointer h-[320px] md:h-[360px]"
       onMouseEnter={() => setFlipped(true)}
       onMouseLeave={() => setFlipped(false)}
       onClick={() => setFlipped(!flipped)}
     >
       <motion.div
-        className="relative w-full h-full preserve-3d"
+        className="relative w-full h-full preserve-3d transition-transform duration-700"
         animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.55, ease: 'easeOut' }}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Front */}
         <div
-          className="absolute inset-0 backface-hidden rounded-xl border p-7 flex flex-col justify-between overflow-hidden"
+          className="absolute inset-0 backface-hidden rounded-2xl border p-8 flex flex-col justify-between overflow-hidden group/card bg-[#111720]/80 backdrop-blur-xl transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]"
           style={{
-            background: '#111720',
-            borderColor: `${committee.color}30`,
+            borderColor: `${committee.color}25`,
+            backfaceVisibility: 'hidden',
           }}
         >
+          {/* Shine Effect */}
+          <div className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-1000 pointer-events-none">
+            <div className="absolute top-[-100%] left-[-100%] w-[300%] h-[300%] bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.03)_50%,transparent_75%)] animate-[shimmer_5s_infinite_linear]" />
+          </div>
+
           {/* Top glow accent */}
           <div
-            className="absolute top-0 left-0 right-0 h-[2px] opacity-60"
+            className="absolute top-0 left-0 right-0 h-[3px] opacity-40 group-hover/card:opacity-90 transition-opacity duration-500"
             style={{ background: `linear-gradient(90deg, transparent, ${committee.color}, transparent)` }}
           />
-          {/* Background glow */}
+
+          {/* Background decoration */}
           <div
-            className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 blur-2xl"
+            className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-10 blur-3xl group-hover/card:scale-125 transition-transform duration-1000"
             style={{ background: committee.color }}
           />
 
           <div className="relative z-10">
-            <div className="flex items-start justify-between mb-5">
+            <div className="flex items-start justify-between mb-8">
               <span
-                className="font-cinzel font-bold text-2xl tracking-wider"
+                className="font-cinzel font-black text-3xl tracking-tighter drop-shadow-lg"
                 style={{ color: committee.color }}
               >
                 {committee.abbr}
               </span>
               <span
-                className="font-inter text-[7px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full border"
+                className="font-inter text-[8px] font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border backdrop-blur-md transition-all duration-300 group-hover/card:border-opacity-100"
                 style={{
                   color: committee.color,
                   borderColor: `${committee.color}40`,
@@ -132,47 +140,49 @@ function CommitteeCard({ committee, index }: { committee: Committee; index: numb
                 {committee.category}
               </span>
             </div>
-            <h3 className="font-cinzel font-bold text-[13px] text-[#e5e7eb] leading-snug mb-4 tracking-wide">
+            <h3 className="font-cinzel font-black text-[15px] text-[#e5e7eb] leading-snug mb-5 tracking-tight group-hover/card:text-white transition-colors">
               {committee.name}
             </h3>
-            <div className="w-8 h-px" style={{ background: `${committee.color}60` }} />
+            <div className="w-12 h-px transition-all duration-500 group-hover/card:w-20" style={{ background: `${committee.color}60` }} />
           </div>
 
-          <div className="relative z-10">
-            <p className="font-inter text-[7px] text-[#475569] font-bold tracking-[0.25em] uppercase mb-1.5">Agenda Topic</p>
-            <p className="font-inter text-[12px] text-[#94a3b8] leading-snug font-medium line-clamp-2">{committee.topic}</p>
+          <div className="relative z-10 p-4 rounded-xl bg-[#080b10]/40 border border-[#1c232b]/50 group-hover/card:border-opacity-100 transition-all duration-500 mt-auto">
+            <p className="font-inter text-[8px] text-[#475569] font-black tracking-[0.3em] uppercase mb-2">Agenda Topic</p>
+            <p className="font-inter text-[13px] text-[#94a3b8] leading-[1.4] font-bold line-clamp-2 group-hover/card:text-[#e5e7eb] transition-colors">{committee.topic}</p>
           </div>
         </div>
 
         {/* Back */}
         <div
-          className="absolute inset-0 backface-hidden rotate-y-180 rounded-xl border p-7 flex flex-col justify-between overflow-hidden"
+          className="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl border p-8 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#0d1117] to-[#111720]"
           style={{
-            background: `linear-gradient(135deg, #0d1117, ${committee.color}18)`,
-            borderColor: `${committee.color}40`,
+            borderColor: `${committee.color}35`,
+            backfaceVisibility: 'hidden',
           }}
         >
           <div
-            className="absolute top-0 left-0 right-0 h-[2px] opacity-60"
+            className="absolute top-0 left-0 right-0 h-[3px] opacity-40"
             style={{ background: `linear-gradient(90deg, transparent, ${committee.color}, transparent)` }}
           />
           <div className="relative z-10">
-            <p className="font-inter text-[7px] font-bold tracking-[0.25em] uppercase mb-4" style={{ color: committee.color }}>
+            <p className="font-inter text-[9px] font-black tracking-[0.3em] uppercase mb-6 flex items-center gap-3" style={{ color: committee.color }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-current" />
               Executive Brief
             </p>
-            <p className="font-inter text-[12px] text-[#94a3b8] leading-relaxed">{committee.description}</p>
+            <p className="font-inter text-[13px] text-[#94a3b8] leading-relaxed font-medium">{committee.description}</p>
           </div>
           <Link
             href="/apply"
             onClick={(e) => e.stopPropagation()}
-            className="font-inter font-bold text-[8px] tracking-[0.15em] uppercase px-5 py-2.5 rounded-lg self-start mt-6 inline-block border transition-all duration-200 hover:opacity-90"
+            className="font-inter font-black text-[10px] tracking-[0.2em] uppercase px-8 py-4 rounded-xl self-start mt-8 inline-block border transition-all duration-300 hover:scale-[1.02] hover:brightness-110 shadow-lg"
             style={{
               background: `${committee.color}20`,
-              borderColor: `${committee.color}50`,
+              borderColor: `${committee.color}60`,
               color: committee.color,
+              boxShadow: `0 0 20px -5px ${committee.color}50`,
             }}
           >
-            Apply for this Committee →
+            Apply for this Arena →
           </Link>
         </div>
       </motion.div>
@@ -182,25 +192,31 @@ function CommitteeCard({ committee, index }: { committee: Committee; index: numb
 
 export default function Committees() {
   return (
-    <section id="committees" className="relative py-20 md:py-48 px-4 sm:px-6 border-t border-[#1c232b] bg-[#080b10]">
-      {/* Background glow */}
-      <div className="glow-orb w-[600px] h-[600px] bg-[#2c5f5d] opacity-[0.04] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute inset-0 dot-grid opacity-20" />
+    <section id="committees" className="relative py-32 md:py-56 px-4 sm:px-6 border-t border-[#1c232b] bg-[#080b10]">
+      {/* Background decoration */}
+      <div className="glow-orb w-[700px] h-[700px] bg-[#2c5f5d] opacity-[0.05] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute inset-0 dot-grid opacity-[0.10] [mask-image:radial-gradient(circle_at_center,black,transparent_80%)]" />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
 
-        <motion.div {...fadeUp(0)} className="mb-24">
-          <div className="section-label mb-10">2026 Committees</div>
-          <h2 className="font-cinzel font-bold text-4xl md:text-5xl lg:text-6xl leading-tight">
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+           className="mb-28"
+        >
+          <div className="section-label mb-12">2026 Committees</div>
+          <h2 className="font-cinzel font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight">
             <span className="gradient-text">Choose Your</span><br />
-            <span className="text-[#1c232b]">Arena</span>
+            <span className="text-[#1c232b] drop-shadow-[0_0_2px_rgba(44,95,93,0.3)]">Arena</span>
           </h2>
-          <p className="font-inter text-[#475569] mt-8 max-w-lg text-[11px] leading-relaxed font-bold uppercase tracking-[0.2em]">
-            Six specialized committees. Hover to explore.
+          <p className="font-inter text-[#475569] mt-10 max-w-xl text-xs leading-relaxed font-black uppercase tracking-[0.3em] opacity-80">
+            Six specialized committees. Represent. Debate. Lead.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {committees.map((c, i) => (
             <CommitteeCard key={c.abbr} committee={c} index={i} />
           ))}

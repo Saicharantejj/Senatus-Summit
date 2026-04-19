@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${cinzel.variable} ${inter.variable} bg-[#0a0d12] text-[#94a3b8] antialiased font-inter relative min-h-screen overflow-x-hidden`}>
+        <div className="grain-overlay" />
         <ScrollProgress />
         <Navbar />
         <main className="relative z-10">{children}</main>
