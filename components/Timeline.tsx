@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, useScroll, useSpring } from 'framer-motion'
 
 interface TimelineEvent {
   time: string
@@ -11,7 +11,131 @@ interface TimelineEvent {
   type?: 'session' | 'break' | 'ceremony' | 'social'
 }
 
-// ... (day1 and day2 definitions remain the same)
+const day1: TimelineEvent[] = [
+  {
+    time: '8:00 – 9:30 AM',
+    title: 'Registration & Accreditation',
+    description: 'Delegate check-in, credential verification, badge collection, and welcome kit distribution.',
+    type: 'ceremony',
+  },
+  {
+    time: '9:30 – 10:30 AM',
+    title: 'Opening Ceremony',
+    description: 'Inaugural address by the Secretary-General, keynote by Chief Guest, and formal induction of all delegates.',
+    highlight: true,
+    type: 'ceremony',
+  },
+  {
+    time: '10:30 – 11:00 AM',
+    title: 'Breakfast',
+    description: 'Complimentary breakfast and informal networking with fellow delegates before committee sessions begin.',
+    type: 'break',
+  },
+  {
+    time: '11:00 AM – 1:00 PM',
+    title: 'Committee Session I',
+    description: 'Opening speeches, position paper presentations, and establishment of the speakers list and agenda.',
+    highlight: true,
+    type: 'session',
+  },
+  {
+    time: '1:00 – 2:00 PM',
+    title: 'Lunch Break',
+    description: 'Structured lunch with inter-delegation networking. A great time to form alliances before the afternoon session.',
+    type: 'break',
+  },
+  {
+    time: '2:00 – 4:00 PM',
+    title: 'Committee Session II',
+    description: 'Moderated and unmoderated caucuses, bloc negotiations, and working paper drafting.',
+    highlight: true,
+    type: 'session',
+  },
+  {
+    time: '4:00 – 6:00 PM',
+    title: 'Addressing & Socials',
+    description: 'Open floor addresses, cultural exchange, and an informal social hour for delegates to connect beyond the dais.',
+    type: 'social',
+  },
+]
+
+const day2: TimelineEvent[] = [
+  {
+    time: '9:00 – 9:30 AM',
+    title: 'Delegate Arrival & Briefing',
+    description: "Morning briefing on the day's agenda, crisis updates, and committee instructions from the dais.",
+    type: 'ceremony',
+  },
+  {
+    time: '9:30 – 11:30 AM',
+    title: 'Committee Session III',
+    description: 'Debate on draft resolutions, crisis simulation updates, and formal voting on amendments.',
+    highlight: true,
+    type: 'session',
+  },
+  {
+    time: '11:30 AM – 12:00 PM',
+    title: 'Tea Break',
+    description: 'Short recess with refreshments. Final informal negotiations before closing sessions.',
+    type: 'break',
+  },
+  {
+    time: '12:00 – 1:30 PM',
+    title: 'Final Committee Session',
+    description: 'Formal voting procedures, passage of resolutions, closing statements from delegates.',
+    highlight: true,
+    type: 'session',
+  },
+  {
+    time: '1:30 – 2:30 PM',
+    title: 'Lunch',
+    description: 'Celebratory lunch marking the conclusion of committee work.',
+    type: 'break',
+  },
+  {
+    time: '2:30 – 4:00 PM',
+    title: 'Press Conference',
+    description: 'The International Press committee presents investigative reports, editorial cartoons, and live coverage to all delegates.',
+    type: 'social',
+  },
+  {
+    time: '4:00 – 5:30 PM',
+    title: 'Award Ceremony',
+    description: 'Best Delegate, Outstanding Delegate, and Special Mention awards presented across all six committees.',
+    highlight: true,
+    type: 'ceremony',
+  },
+  {
+    time: '5:30 – 6:30 PM',
+    title: 'Closing Ceremony & Banquet',
+    description: 'Closing address by the Secretary-General followed by a celebratory banquet marking the end of Senatus Summit 2026.',
+    highlight: true,
+    type: 'ceremony',
+  },
+]
+
+const typeConfig: Record<string, { label: string; dot: string; badge: string }> = {
+  session:  {
+    label: 'Committee',
+    dot:   '#2c5f5d',
+    badge: 'text-[#3d8a87] border-[#2c5f5d]/30 bg-[#0e1a1a]',
+  },
+  ceremony: {
+    label: 'Ceremony',
+    dot:   '#7aa07a',
+    badge: 'text-[#7aa07a] border-[#5a7a5a]/30 bg-[#0e160e]',
+  },
+  break: {
+    label: 'Break',
+    dot:   '#2a3340',
+    badge: 'text-[#475569] border-[#1c232b] bg-[#0d1117]',
+  },
+  social: {
+    label: 'Social',
+    dot:   '#7a7aaa',
+    badge: 'text-[#7a7aaa] border-[#5a5a8a]/30 bg-[#0e0e1a]',
+  },
+}
 
 function EventCard({ event, index }: { event: TimelineEvent; index: number }) {
   const cfg = typeConfig[event.type || 'break']
