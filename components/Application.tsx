@@ -572,6 +572,7 @@ export default function Application() {
                             <Image src="/qr.png" alt="UPI QR" width={160} height={160} className="object-contain w-full h-full" />
                           </div>
                           <p className="font-cinzel font-bold text-[11px] tracking-[0.12em] text-[#94a3b8]">Badisetty Manasa</p>
+                          <p className="font-inter text-[10px] tracking-[0.08em] text-[#475569]">saicharantejj@ptyes</p>
                           <button onClick={qr.hide} className="font-inter text-[8px] text-[#333] hover:text-[#475569] uppercase tracking-widest transition-colors">Hide</button>
                         </motion.div>
                       ) : (
