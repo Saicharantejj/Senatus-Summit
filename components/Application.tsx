@@ -21,6 +21,7 @@ interface FormState {
   portfolio3: string
   hasMunExperience: string
   munExperienceDetails: string
+  paymentAccountName: string
 }
 
 const INITIAL: FormState = {
@@ -28,6 +29,7 @@ const INITIAL: FormState = {
   committeePreference: '',
   portfolio1: '', portfolio2: '', portfolio3: '',
   hasMunExperience: '', munExperienceDetails: '',
+  paymentAccountName: '',
 }
 
 // ─── QR Timer Hook ───────────────────────────────────────────
@@ -273,6 +275,7 @@ export default function Application() {
     if (form.portfolio2 && form.portfolio3 && form.portfolio2 === form.portfolio3)
       e.portfolio3 = '3rd preference must differ from 2nd.'
     if (!form.hasMunExperience) e.hasMunExperience = 'Please select an option.'
+    if (!form.paymentAccountName.trim()) e.paymentAccountName = 'Please enter the account name used for payment.'
     setErrors(e)
     if (!screenshot) {
       setErrors(prev => ({ ...prev, ...e, screenshot: 'Payment screenshot is required before submitting.' }))
@@ -315,9 +318,10 @@ export default function Application() {
           '1st Portfolio Choice': form.portfolio1,
           '2nd Portfolio Choice': form.portfolio2,
           '3rd Portfolio Choice': form.portfolio3,
-          'MUN Experience':       form.hasMunExperience === 'yes' ? 'Yes' : 'No',
-          'Experience Details':   form.munExperienceDetails || '—',
-          'Payment Screenshot':   screenshot?.name ?? '—',
+          'MUN Experience':        form.hasMunExperience === 'yes' ? 'Yes' : 'No',
+          'Experience Details':    form.munExperienceDetails || '—',
+          'Payment Account Name':  form.paymentAccountName,
+          'Payment Screenshot':    screenshot?.name ?? '—',
         }),
       })
       const data = await res.json()
@@ -584,8 +588,18 @@ export default function Application() {
                     </AnimatePresence>
                   </div>
 
-                  {/* Screenshot upload */}
-                  <div className="flex-1 flex flex-col gap-2">
+                  {/* Account name + Screenshot upload */}
+                  <div className="flex-1 flex flex-col gap-4">
+                    <Field label="Account Name Used for Payment" required error={errors.paymentAccountName}>
+                      <input
+                        type="text"
+                        placeholder="e.g. Rahul Sharma"
+                        value={form.paymentAccountName}
+                        onChange={set('paymentAccountName')}
+                        className={`form-input ${errors.paymentAccountName ? 'border-rose-900/60' : ''}`}
+                      />
+                    </Field>
+                  <div className="flex flex-col gap-2">
                     <label className="font-inter text-[9px] font-semibold tracking-[0.14em] uppercase text-[#484440]">
                       Upload Payment Screenshot <span className="text-rose-500">* Required</span>
                     </label>
@@ -605,6 +619,7 @@ export default function Application() {
                       </button>
                     )}
                     {errors.screenshot && <p className="font-inter text-[10px] text-rose-500/80">{errors.screenshot}</p>}
+                  </div>
                   </div>
                 </div>
               </div>
