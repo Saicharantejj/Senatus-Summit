@@ -370,7 +370,18 @@ export default function Application() {
 
         {/* Header */}
         <motion.div {...fadeUp(0)} className="mb-14">
-          <div className="section-label mb-6 text-[#94a3b8]">Applications Open</div>
+          <div className="flex items-center gap-4 mb-6 flex-wrap">
+            <div className="section-label text-[#94a3b8]">Applications Open</div>
+            <a
+              href="https://docs.google.com/spreadsheets/d/16HP1FMzmPfQcIU52s8fkBxhD8GQj2j9EYE-7D9j8vZw/edit?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-inter text-[8px] font-black tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-[#2c5f5d]/40 bg-[#0e1a1a] text-[#3d8a87] hover:border-[#2c5f5d]/80 hover:text-[#5aafab] transition-all duration-300"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2c5f5d] animate-pulse shadow-[0_0_6px_#2c5f5d]" />
+              Live Matrix
+            </a>
+          </div>
           <h2 className="font-cinzel font-semibold text-3xl md:text-4xl lg:text-5xl text-[#e5e7eb] leading-tight">
             Claim Your Seat
           </h2>
