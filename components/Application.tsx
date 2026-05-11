@@ -397,7 +397,7 @@ export default function Application() {
               Delegate Fees
             </p>
             <span className="font-inter text-[7px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full border border-[#2c5f5d]/40 text-[#3d8a87] bg-[#0e1a1a]">
-              🐦 Early Bird — Ends May 5
+              🐦 Early Bird — Ends June 1
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
