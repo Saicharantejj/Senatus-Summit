@@ -408,7 +408,7 @@ export default function Application() {
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,750</span>
-                  <span className="font-inter text-[9px] text-[#333] line-through">₹1,900</span>
+                  <span className="font-inter text-[9px] text-[#333] line-through">₹2,000</span>
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
@@ -420,7 +420,7 @@ export default function Application() {
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,700</span>
-                  <span className="font-inter text-[9px] text-[#333] line-through">₹1,800</span>
+                  <span className="font-inter text-[9px] text-[#333] line-through">₹1,950</span>
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
