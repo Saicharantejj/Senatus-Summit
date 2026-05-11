@@ -376,7 +376,7 @@ export default function Application() {
               href="https://docs.google.com/spreadsheets/d/16HP1FMzmPfQcIU52s8fkBxhD8GQj2j9EYE-7D9j8vZw/edit?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-inter text-[8px] font-black tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-[#2c5f5d]/40 bg-[#0e1a1a] text-[#3d8a87] hover:border-[#2c5f5d]/80 hover:text-[#5aafab] transition-all duration-300"
+              className="inline-flex items-center gap-2 font-inter text-[9px] font-black tracking-[0.2em] uppercase px-5 py-2.5 rounded-full border border-[#2c5f5d]/70 bg-[#0e2020] text-[#52a19e] hover:border-[#2c5f5d] hover:text-[#7abfbd] hover:bg-[#0e2a2a] transition-all duration-300 shadow-[0_0_16px_rgba(44,95,93,0.2)]"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#2c5f5d] animate-pulse shadow-[0_0_6px_#2c5f5d]" />
               Live Matrix
