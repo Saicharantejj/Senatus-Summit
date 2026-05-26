@@ -396,9 +396,6 @@ export default function Application() {
             <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
               Delegate Fees
             </p>
-            <span className="font-inter text-[7px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full border border-[#2c5f5d]/40 text-[#3d8a87] bg-[#0e1a1a]">
-              🐦 Early Bird — Ends June 1
-            </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="card rounded-xl p-5 flex items-center gap-4">
@@ -407,8 +404,7 @@ export default function Application() {
                   UNGA · UNCSW · UNHRC · AIPPM · FIA
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,750</span>
-                  <span className="font-inter text-[9px] text-[#333] line-through">₹2,000</span>
+                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹2,100</span>
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
@@ -419,8 +415,7 @@ export default function Application() {
                   International Press (IP)
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹1,700</span>
-                  <span className="font-inter text-[9px] text-[#333] line-through">₹1,950</span>
+                  <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">₹2,000</span>
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
