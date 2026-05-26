@@ -2,7 +2,7 @@
 
 import { useState, useRef, type FormEvent, type ChangeEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Loader2, Upload, X, QrCode, Timer } from 'lucide-react'
+import { CheckCircle, Loader2, Upload, X, QrCode, Timer, ExternalLink, Table2 } from 'lucide-react'
 import Image from 'next/image'
 
 const TIMER_SECONDS = 180
@@ -370,24 +370,51 @@ export default function Application() {
 
         {/* Header */}
         <motion.div {...fadeUp(0)} className="mb-14">
-          <div className="flex items-center gap-4 mb-6 flex-wrap">
-            <div className="section-label text-[#94a3b8]">Applications Open</div>
-            <a
-              href="https://docs.google.com/spreadsheets/d/16HP1FMzmPfQcIU52s8fkBxhD8GQj2j9EYE-7D9j8vZw/edit?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-inter text-[9px] font-black tracking-[0.2em] uppercase px-5 py-2.5 rounded-full border border-[#2c5f5d]/70 bg-[#0e2020] text-[#52a19e] hover:border-[#2c5f5d] hover:text-[#7abfbd] hover:bg-[#0e2a2a] transition-all duration-300 shadow-[0_0_16px_rgba(44,95,93,0.2)]"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2c5f5d] animate-pulse shadow-[0_0_6px_#2c5f5d]" />
-              Live Matrix
-            </a>
-          </div>
+          <div className="section-label text-[#94a3b8] mb-6">Applications Open</div>
           <h2 className="font-cinzel font-semibold text-3xl md:text-4xl lg:text-5xl text-[#e5e7eb] leading-tight">
             Claim Your Seat
           </h2>
           <p className="font-inter text-[#555] mt-4 max-w-md text-sm leading-relaxed">
             A confirmation email will be sent to you within 24 hours.
           </p>
+
+          {/* Live Matrix — high-visibility CTA */}
+          <motion.a
+            href="https://docs.google.com/spreadsheets/d/16HP1FMzmPfQcIU52s8fkBxhD8GQj2j9EYE-7D9j8vZw/edit?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="group relative mt-8 inline-flex items-center gap-4 w-full sm:w-auto px-7 py-4 rounded-2xl overflow-hidden border-2 border-[#2c5f5d] bg-gradient-to-r from-[#0e2a2a] via-[#103333] to-[#0e2a2a] text-[#7abfbd] hover:text-white hover:border-[#52a19e] transition-all duration-300 shadow-[0_0_30px_rgba(44,95,93,0.45)] hover:shadow-[0_0_45px_rgba(82,161,158,0.7)]"
+          >
+            {/* Animated shine sweep */}
+            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-[#52a19e]/20 to-transparent" />
+
+            {/* Pulse ring */}
+            <span className="relative flex h-3 w-3 shrink-0">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-[#52a19e] opacity-75 animate-ping" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-[#2c5f5d] shadow-[0_0_10px_#52a19e]" />
+            </span>
+
+            {/* Icon */}
+            <Table2 size={18} className="relative shrink-0 text-[#52a19e] group-hover:text-white transition-colors duration-300" />
+
+            {/* Text block */}
+            <div className="relative flex flex-col items-start leading-tight">
+              <span className="font-inter text-[8px] font-bold tracking-[0.3em] uppercase text-[#52a19e]/80 group-hover:text-[#7abfbd] transition-colors">
+                View Live
+              </span>
+              <span className="font-cinzel font-black text-[15px] sm:text-base tracking-[0.18em] uppercase">
+                The Senatus Matrix
+              </span>
+            </div>
+
+            {/* External arrow */}
+            <ExternalLink size={16} className="relative ml-auto sm:ml-2 shrink-0 text-[#52a19e]/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+          </motion.a>
         </motion.div>
 
         {/* Delegate Fees */}
