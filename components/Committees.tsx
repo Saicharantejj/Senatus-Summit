@@ -17,56 +17,56 @@ const committees: Committee[] = [
   {
     abbr: 'UNCSW',
     name: 'UN Commission on the Status of Women',
-    topic: 'Protection of Women in Conflict Zones',
+    topic: 'Protection of Women in Active Conflict Zones — Afghanistan & Gaza',
     category: 'Gender & Rights',
     color: '#7a5a8a',
     description:
-      'Examining the systemic exploitation and violence faced by women in active conflict regions, with a focus on Afghanistan and Gaza. Delegates will draft binding frameworks for accountability and relief.',
+      "The UN's principal body on gender policy meets to confront one of the most urgent questions of our era: how do we protect women trapped in war when international law keeps failing them? Delegates representing UN member states will tackle Taliban-era Afghanistan and the Gaza crisis head-on — drafting binding frameworks on accountability, humanitarian access, and reparations. Expect intense moral debate, contested evidence, and resolutions that demand more than symbolism.",
   },
   {
     abbr: 'AIPPM',
     name: 'All India Political Parties Meet',
-    topic: 'Majoritarian Narratives & Secularism in India',
+    topic: 'Majoritarian Narratives & the Future of Indian Secularism',
     category: 'National Politics',
     color: '#8a6a2c',
     description:
-      "A high-stakes deliberation on the rising tide of majoritarianism and its impact on India's secular constitutional fabric. Delegates represent India's major political parties.",
+      "AIPPM is the most politically charged simulation on the docket — a closed-door deliberation where India's leading parties hash out the country's future. You won't represent a country; you'll represent a real Indian politician (Modi, Rahul Gandhi, Owaisi, Mamata Banerjee, and more) and defend their stance on whether India's secular constitution can survive the rise of majoritarian politics. Expect heated cross-questioning, no formal procedure, and the chaotic energy of Indian parliament itself.",
   },
   {
     abbr: 'UNHRC',
     name: 'UN Human Rights Council',
-    topic: 'Violations of Humanitarian Law in Armed Conflicts',
+    topic: 'Violations of International Humanitarian Law in Armed Conflicts',
     category: 'Human Rights',
     color: '#8a2c2c',
     description:
-      'Addressing grave breaches of international humanitarian law in ongoing armed conflicts. Delegates examine accountability mechanisms, civilian protection, and the enforcement of the Geneva Conventions.',
+      "The UNHRC is the world's primary forum for accountability when wars break the rules. Delegates dissect grave breaches of international humanitarian law — disproportionate force, attacks on civilians and aid workers, the targeting of medical facilities — across today's active conflicts. You'll wrestle with the Geneva Conventions in practice, debate whether universal jurisdiction has teeth, and confront the gap between what international law promises and what it actually delivers. Be ready to argue with both moral clarity and political realism.",
   },
   {
     abbr: 'UNGA',
     name: 'UN General Assembly',
-    topic: 'Global Reserve Architecture & Financial Systems',
+    topic: 'Reimagining the Global Reserve Currency & Financial Architecture',
     category: 'Global Finance',
     color: '#2c5f5d',
     description:
-      'Reimagining the global reserve currency framework and international monetary architecture. Topics include de-dollarization, digital currencies, and equitable representation in global finance.',
+      "The UNGA brings every member state under one roof — making it the largest, most procedurally rigorous, and most diplomatically diverse committee at the Summit. The agenda: rewrite the global financial order. With the US dollar's dominance challenged by BRICS de-dollarization, the rise of CBDCs and stablecoins, and the Global South demanding fairer representation at the IMF and World Bank, delegates must negotiate a new monetary architecture for a multipolar world. Bloc politics, technical economics, and high-stakes diplomacy — all in one room.",
   },
   {
     abbr: 'IP',
     name: 'International Press',
-    topic: 'Photography · Journalism · Caricature',
+    topic: 'Photography · Journalism · Editorial Cartoons — Be the Press',
     category: 'Media & Press',
     color: '#4a6a8a',
     description:
-      'A unique committee where delegates become the press. Cover committee proceedings through investigative journalism, photography, editorial cartoons, and live reporting. The pen is your gavel.',
+      "The International Press is the rebel committee — no flags, no portfolios, no resolutions. Instead, you're a working journalist with full access to every committee in session. Photographers capture the moments that define the Summit. Reporters file articles on bloc dynamics, breaking crises, and delegate quotes. Caricaturists skewer the room with editorial cartoons. By the closing ceremony, your bylines, lenses, and pens shape the historical record of Senatus '26 — because the story of this Summit will be the one you tell.",
   },
   {
     abbr: 'FIA',
     name: 'Fédération Internationale de l\'Automobile',
-    topic: 'Assessing Regulatory Overreach: The 2026 Active Aerodynamics and Power Unit Overhaul',
+    topic: 'Regulatory Overreach: The 2026 Active Aero & Power Unit Crisis',
     category: 'Sports Governance',
     color: '#6a4a2a',
     description:
-      'Following the pre-season testing backlash from team principals questioning the overly complex front-wheel active aero system and Mercedes\' potential exploitation of power unit loopholes, delegates convene post the March 15, 2026 freeze date to deliberate on the limits of regulatory authority in international motorsport.',
+      "The FIA governs world motorsport — and in 2026, it's under siege. Following Formula 1's most controversial regulation overhaul in a decade, team principals from Mercedes, Red Bull, Ferrari, and McLaren have openly attacked the new active front-wing aerodynamics and power unit rules, alleging selective enforcement and exploited loopholes. Convening after the March 15 development freeze, delegates representing teams, drivers, sponsors, and FIA officials must decide where sporting oversight ends and regulatory overreach begins. Engineering, politics, and hundreds of millions in dev budgets — all on the table.",
   },
 ]
 
