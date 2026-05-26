@@ -6,15 +6,9 @@ import { Mail, Phone } from 'lucide-react'
 const phones = [
   {
     name: 'Saicharan Tej',
-    role: 'Co-Founder & Secretary General',
+    role: 'Founder & Secretary General',
     number: '+91 79752 98131',
     href: 'tel:+917975298131',
-  },
-  {
-    name: 'Rishika Singh',
-    role: 'Co-Founder',
-    number: '+91 82875 18294',
-    href: 'tel:+918287518294',
   },
 ]
 
@@ -154,7 +148,7 @@ export default function Contact() {
           />
 
           {/* Phone numbers */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
+          <div className="flex flex-col gap-3 mt-1">
             {phones.map((p, i) => (
               <ContactCard
                 key={p.name}
