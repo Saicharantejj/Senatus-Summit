@@ -53,7 +53,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#2c5f5d] animate-pulse shadow-[0_0_10px_#2c5f5d]" />
-              <span className="font-inter text-[9px] font-black tracking-[0.3em] text-[#52a19e] uppercase">July 11–12, 2026</span>
+              <span className="font-inter text-[9px] font-black tracking-[0.3em] text-[#52a19e] uppercase">July 25–26, 2026</span>
             </div>
           </div>
 

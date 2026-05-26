@@ -44,7 +44,7 @@ export default function Navbar() {
               <span className="text-[#1c232b]">·</span>
               <span className="text-[#2c5f5d] mx-3">Senatus Summit 2026</span>
               <span className="text-[#1c232b]">·</span>
-              <span className="text-[#475569] mx-3">July 11–12</span>
+              <span className="text-[#475569] mx-3">July 25–26</span>
               <span className="text-[#1c232b]">·</span>
               <span className="text-[#475569] mx-3">Where Debate Meets Diplomacy</span>
             </span>
