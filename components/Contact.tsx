@@ -135,9 +135,9 @@ export default function Contact() {
 
           {/* Instagram */}
           <ContactCard
-            href="https://instagram.com/the.senatus.summit"
+            href="https://www.instagram.com/thesenatussummit/"
             label="Instagram"
-            title="@the.senatus.summit"
+            title="@thesenatussummit"
             delay={0.18}
             accentColor="#7a5a8a"
             icon={
