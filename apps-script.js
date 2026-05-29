@@ -33,8 +33,8 @@ function setup() {
   let appSheet = ss.getSheetByName(APP_SHEET)
   if (!appSheet) appSheet = ss.insertSheet(APP_SHEET)
   appSheet.clearContents()
-  appSheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details'])
-  styleHeaderRow(appSheet, 9, '#1a3a2a', '#a8d5b5')
+  appSheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details','Any Reference'])
+  styleHeaderRow(appSheet, 10, '#1a3a2a', '#a8d5b5')
 
   // ── Committee sheets ──
   const committees = {
@@ -112,8 +112,8 @@ function ensureHeaders() {
   let sheet = ss.getSheetByName(APP_SHEET)
   if (!sheet) sheet = ss.insertSheet(APP_SHEET)
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details'])
-    styleHeaderRow(sheet, 9, '#1a3a2a', '#a8d5b5')
+    sheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details','Any Reference'])
+    styleHeaderRow(sheet, 10, '#1a3a2a', '#a8d5b5')
   }
   // Payments
   let paySheet = ss.getSheetByName(PAY_SHEET)
@@ -237,6 +237,7 @@ function doPost(e) {
       committee, portfolio,
       data.hasMunExperience === 'yes' ? 'Yes' : 'No',
       data.munExperienceDetails || '—',
+      data.reference || '—',
     ])
 
     markAllotedInCommitteeSheet(committee, portfolio)

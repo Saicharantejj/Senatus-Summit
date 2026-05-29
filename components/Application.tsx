@@ -22,6 +22,7 @@ interface FormState {
   hasMunExperience: string
   munExperienceDetails: string
   paymentAccountName: string
+  reference: string
 }
 
 const INITIAL: FormState = {
@@ -30,6 +31,7 @@ const INITIAL: FormState = {
   portfolio1: '', portfolio2: '', portfolio3: '',
   hasMunExperience: '', munExperienceDetails: '',
   paymentAccountName: '',
+  reference: '',
 }
 
 // ─── QR Timer Hook ───────────────────────────────────────────
@@ -322,6 +324,7 @@ export default function Application() {
           'Experience Details':    form.munExperienceDetails || '—',
           'Payment Account Name':  form.paymentAccountName,
           'Payment Screenshot':    screenshot?.name ?? '—',
+          'Any Reference':         form.reference || '—',
         }),
       })
       const data = await res.json()
@@ -581,6 +584,12 @@ export default function Application() {
                   </Field>
                 </motion.div>
               )}
+
+              {/* Reference */}
+              <Field label="Any Reference">
+                <input type="text" placeholder="e.g. Friend, Social Media, name of reference person (Optional)"
+                  value={form.reference} onChange={set('reference')} className="form-input" />
+              </Field>
 
               {/* ── Payment Section ── */}
               <div className="border border-[#1c232b] rounded-xl p-5 space-y-4 bg-[#0d1117]">
