@@ -18,56 +18,56 @@ const committees: Committee[] = [
   {
     abbr: 'UNCSW',
     name: 'UN Commission on the Status of Women',
-    topic: 'Protection of Women in Active Conflict Zones — Afghanistan & Gaza',
+    topic: 'Ensuring protection of women and girls in conflict and post-conflict regions, with special emphasis on Afghanistan and Gaza',
     category: 'Gender & Rights',
     color: '#7a5a8a',
     description:
-      "The UN's principal body on gender policy meets to confront one of the most urgent questions of our era: how do we protect women trapped in war when international law keeps failing them? Delegates representing UN member states will tackle Taliban-era Afghanistan and the Gaza crisis head-on — drafting binding frameworks on accountability, humanitarian access, and reparations. Expect intense moral debate, contested evidence, and resolutions that demand more than symbolism.",
+      'Women and girls face unique dangers in war-torn regions like Afghanistan and Gaza, where their rights, safety, and basic freedoms are severely threatened. This committee will address these urgent issues, focusing on how the international community can provide safety, guarantee access to education and healthcare, and protect women from violence during and after conflicts.',
   },
   {
     abbr: 'AIPPM',
     name: 'All India Political Parties Meet',
-    topic: 'Majoritarian Narratives & the Future of Indian Secularism',
+    topic: 'Analyzing the tension between majoritarian political narratives and the constitutional principle of secularism in India',
     category: 'National Politics',
     color: '#8a6a2c',
     description:
-      "AIPPM is the most politically charged simulation on the docket — a closed-door deliberation where India's leading parties hash out the country's future. You won't represent a country; you'll represent a real Indian politician (Modi, Rahul Gandhi, Owaisi, Mamata Banerjee, and more) and defend their stance on whether India's secular constitution can survive the rise of majoritarian politics. Expect heated cross-questioning, no formal procedure, and the chaotic energy of Indian parliament itself.",
+      "India is constitutionally defined as a secular nation where all religions are treated equally. However, the rise of political movements that focus on the desires of the religious majority has sparked a fierce debate about the country's identity. In this committee, you will represent a real-world Indian politician and debate whether secularism can survive alongside majority-focused politics, and what this means for India's future.",
   },
   {
     abbr: 'UNHRC',
     name: 'UN Human Rights Council',
-    topic: 'Violations of International Humanitarian Law in Armed Conflicts',
+    topic: 'Addressing violations of international humanitarian law in ongoing armed conflicts with special emphasis on civilian protection',
     category: 'Human Rights',
     color: '#8a2c2c',
     description:
-      "The UNHRC is the world's primary forum for accountability when wars break the rules. Delegates dissect grave breaches of international humanitarian law — disproportionate force, attacks on civilians and aid workers, the targeting of medical facilities — across today's active conflicts. You'll wrestle with the Geneva Conventions in practice, debate whether universal jurisdiction has teeth, and confront the gap between what international law promises and what it actually delivers. Be ready to argue with both moral clarity and political realism.",
+      "Even during wars, there are strict international laws designed to protect innocent people. Unfortunately, these laws are frequently broken in today's conflicts. This committee will focus on how to hold nations and groups accountable when they harm civilians, block aid, or target hospitals, and search for real ways to enforce human rights in active conflict zones.",
   },
   {
     abbr: 'UNGA',
     name: 'UN General Assembly',
-    topic: 'Reimagining the Global Reserve Currency & Financial Architecture',
+    topic: 'Deliberation on the Implications of De-dollarization and the Evolving Architecture of Global Reserve Currencies in Ensuring Equitable and Stable International Financial Systems',
     category: 'Global Finance',
     color: '#2c5f5d',
     description:
-      "The UNGA brings every member state under one roof — making it the largest, most procedurally rigorous, and most diplomatically diverse committee at the Summit. The agenda: rewrite the global financial order. With the US dollar's dominance challenged by BRICS de-dollarization, the rise of CBDCs and stablecoins, and the Global South demanding fairer representation at the IMF and World Bank, delegates must negotiate a new monetary architecture for a multipolar world. Bloc politics, technical economics, and high-stakes diplomacy — all in one room.",
+      'For decades, the US Dollar has been the main currency used for global trade. Now, many countries are trying to move away from using the dollar (called de-dollarization) by using digital currencies or local options instead. This committee will explore how shifting away from the dollar affects international trade, and how to create a fairer, more stable global financial system for every nation.',
   },
   {
     abbr: 'IP',
     name: 'International Press',
-    topic: 'Photography · Journalism · Editorial Cartoons — Be the Press',
+    topic: 'Photography, journalism, caricature',
     category: 'Media & Press',
     color: '#4a6a8a',
     description:
-      "The International Press is the rebel committee — no flags, no portfolios, no resolutions. Instead, you're a working journalist with full access to every committee in session. Photographers capture the moments that define the Summit. Reporters file articles on bloc dynamics, breaking crises, and delegate quotes. Caricaturists skewer the room with editorial cartoons. By the closing ceremony, your bylines, lenses, and pens shape the historical record of Senatus '26 — because the story of this Summit will be the one you tell.",
+      'Unlike other committees that represent countries and draft laws, the International Press is here to document the entire summit. As a member of the press, you will act as a real-world journalist, photographer, or cartoonist. Your job is to visit other committees, interview delegates, capture key moments, and publish articles or draw caricatures that shape how the story of the Senatus Summit is told.',
   },
   {
     abbr: 'FIA',
     name: 'Fédération Internationale de l\'Automobile',
-    topic: 'Regulatory Overreach: The 2026 Active Aero & Power Unit Crisis',
+    topic: 'Assessing Regulatory Overreach: The 2026 Active Aerodynamics and Power Unit Overhaul',
     category: 'Sports Governance',
     color: '#6a4a2a',
     description:
-      "The FIA governs world motorsport — and in 2026, it's under siege. Following Formula 1's most controversial regulation overhaul in a decade, team principals from Mercedes, Red Bull, Ferrari, and McLaren have openly attacked the new active front-wing aerodynamics and power unit rules, alleging selective enforcement and exploited loopholes. Convening after the March 15 development freeze, delegates representing teams, drivers, sponsors, and FIA officials must decide where sporting oversight ends and regulatory overreach begins. Engineering, politics, and hundreds of millions in dev budgets — all on the table.",
+      'In 2026, Formula 1 has introduced complex new rules for engines and moving wing parts (active aerodynamics). However, top team bosses are furious: they believe the front wing aero system is too complicated and dangerous, and accuse Mercedes of abusing loopholes in the new engine design. This committee will debate where the sport\'s governing body (FIA) should draw the line between fair rules and controlling the teams too much, following the critical March 15, 2026 pre-season testing freeze.',
   },
 ]
 
