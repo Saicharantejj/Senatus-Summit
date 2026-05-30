@@ -8,11 +8,12 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 const navLinks = [
-  { label: 'About',      href: '/about' },
-  { label: 'Venue',      href: '/venue' },
-  { label: 'Committees', href: '/committees' },
-  { label: 'Timeline',   href: '/timeline' },
-  { label: 'Contact',    href: '/contact' },
+  { label: 'About',        href: '/about' },
+  { label: 'Venue',        href: '/venue' },
+  { label: 'Committees',   href: '/committees' },
+  { label: 'Timeline',     href: '/timeline' },
+  { label: 'Prudence 16B', href: '/prudence' },
+  { label: 'Contact',      href: '/contact' },
 ]
 
 export default function Navbar() {

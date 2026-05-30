@@ -4,12 +4,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 const navLinks = [
-  { label: 'About',      href: '/about' },
-  { label: 'Venue',      href: '/venue' },
-  { label: 'Committees', href: '/committees' },
-  { label: 'Timeline',   href: '/timeline' },
-  { label: 'Apply',      href: '/apply' },
-  { label: 'Contact',    href: '/contact' },
+  { label: 'About',        href: '/about' },
+  { label: 'Venue',        href: '/venue' },
+  { label: 'Committees',   href: '/committees' },
+  { label: 'Timeline',     href: '/timeline' },
+  { label: 'Apply',        href: '/apply' },
+  { label: 'Prudence 16B', href: '/prudence' },
+  { label: 'Contact',      href: '/contact' },
 ]
 
 export default function Footer() {
