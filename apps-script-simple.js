@@ -1,10 +1,23 @@
 // ── Paste this into Apps Script (Extensions → Apps Script) ──
-// Sheet ID is hardcoded so it works as a standalone project
+// Sheet IDs are hardcoded for configuration
 
-const SHEET_ID = '1Bbt_QVvtoTVvc9HE9Wc4h1V-Q2XABCW2kK6JUriq7fE'
+const PUBLIC_SHEET_ID  = '16HP1FMzmPfQcIU52s8fkBxhD8GQj2j9EYE-7D9j8vZw' // The public spreadsheet visible to everyone
+const PRIVATE_SHEET_ID = 'YOUR_PRIVATE_SPREADSHEET_ID_HERE' // The private spreadsheet for Applications
+
+function getPublicSS() {
+  return SpreadsheetApp.openById(PUBLIC_SHEET_ID)
+}
+
+function getPrivateSS() {
+  if (!PRIVATE_SHEET_ID || PRIVATE_SHEET_ID === 'YOUR_PRIVATE_SPREADSHEET_ID_HERE' || PRIVATE_SHEET_ID === PUBLIC_SHEET_ID) {
+    console.warn("WARNING: PRIVATE_SHEET_ID is not configured. Sensitive data is being stored in the public spreadsheet!");
+    return getPublicSS();
+  }
+  return SpreadsheetApp.openById(PRIVATE_SHEET_ID)
+}
 
 function doGet() {
-  const ss    = SpreadsheetApp.openById(SHEET_ID)
+  const ss    = getPrivateSS()
   let   sheet = ss.getSheetByName('Applications')
   if (!sheet) {
     sheet = ss.insertSheet('Applications')
@@ -22,7 +35,7 @@ function doGet() {
 function doPost(e) {
   try {
     const data  = JSON.parse(e.postData.contents)
-    const ss    = SpreadsheetApp.openById(SHEET_ID)
+    const ss    = getPrivateSS()
     let   sheet = ss.getSheetByName('Applications')
     if (!sheet) {
       sheet = ss.insertSheet('Applications')
