@@ -17,11 +17,27 @@ const APP_SHEET      = 'Applications'
 const PAY_SHEET      = 'Payments'
 const STATUS_ALLOTED = 'Alloted'
 const DRIVE_FOLDER   = 'Senatus Summit 2026 — Payment Screenshots'
+const ADMIN_EMAIL    = 'saicharantejprofessional@gmail.com'
 
 function getSS()                  { return SpreadsheetApp.openById(SHEET_ID) }
 function getAppSheet()            { return getSS().getSheetByName(APP_SHEET) }
 function getPaySheet()            { return getSS().getSheetByName(PAY_SHEET) }
 function getCommitteeSheet(name)  { return getSS().getSheetByName(name) }
+
+// ─── DIAGNOSTIC TEST FUNCTION ─────────────────────────────────
+function testAll() {
+  // 1. Test Spreadsheet access
+  const ssName = getSS().getName();
+  Logger.log("✅ Spreadsheet Access OK. Name: " + ssName);
+  
+  // 2. Test Drive access
+  const folder = getOrCreateFolder(DRIVE_FOLDER);
+  Logger.log("✅ Drive Access OK. Folder ID: " + folder.getId());
+  
+  // 3. Test Email access
+  MailApp.sendEmail(ADMIN_EMAIL, 'Senatus Service Test', 'All services authorized successfully!');
+  Logger.log("✅ Email Access OK. Sent test email to: " + ADMIN_EMAIL);
+}
 
 // ─── ONE-TIME SETUP ──────────────────────────────────────────
 // Run this once after pasting the script. Creates all sheets with headers + formatting.
@@ -33,8 +49,8 @@ function setup() {
   let appSheet = ss.getSheetByName(APP_SHEET)
   if (!appSheet) appSheet = ss.insertSheet(APP_SHEET)
   appSheet.clearContents()
-  appSheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details','Any Reference'])
-  styleHeaderRow(appSheet, 10, '#1a3a2a', '#a8d5b5')
+  appSheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','1st Choice','2nd Choice','3rd Choice','MUN Experience','Experience Details','Payment Account Name','Payment Screenshot Link','Any Reference','Registration Type'])
+  styleHeaderRow(appSheet, 16, '#1a3a2a', '#a8d5b5')
 
   // ── Committee sheets ──
   const committees = {
@@ -112,8 +128,8 @@ function ensureHeaders() {
   let sheet = ss.getSheetByName(APP_SHEET)
   if (!sheet) sheet = ss.insertSheet(APP_SHEET)
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','MUN Experience','Experience Details','Any Reference'])
-    styleHeaderRow(sheet, 10, '#1a3a2a', '#a8d5b5')
+    sheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','1st Choice','2nd Choice','3rd Choice','MUN Experience','Experience Details','Payment Account Name','Payment Screenshot Link','Any Reference','Registration Type'])
+    styleHeaderRow(sheet, 16, '#1a3a2a', '#a8d5b5')
   }
   // Payments
   let paySheet = ss.getSheetByName(PAY_SHEET)
@@ -206,6 +222,101 @@ function doGet() {
     .setMimeType(ContentService.MimeType.JSON)
 }
 
+// ─── SEND EMAIL NOTIFICATION ─────────────────────────────────
+function sendNotificationEmail(data) {
+  try {
+    const subject = `New Registration: ${data.fullName} - ${data.committeePreference || 'No Committee'}`;
+    const htmlBody = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #fafafa;">
+        <h2 style="color: #2c5f5d; border-bottom: 2px solid #2c5f5d; padding-bottom: 10px; margin-top: 0; font-family: Garamond, Georgia, serif; letter-spacing: 1px;">
+          New Senatus Summit 2026 Registration
+        </h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+          <tr style="background-color: #e6f0f0;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd; width: 40%; font-size: 13px; color: #2c5f5d;">Field</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd; font-size: 13px; color: #2c5f5d;">Details</th>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Full Name</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.fullName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Email</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;"><a href="mailto:${data.email}">${data.email}</a></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Phone</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.phone}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Institution</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.institution}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Committee Preference</td>
+            <td style="padding: 10px; border: 1px solid #ddd; color: #2c5f5d; font-weight: bold; font-size: 12px;">${data.committeePreference}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">1st Choice Portfolio</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.portfolio1 || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">2nd Choice Portfolio</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.portfolio2 || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">3rd Choice Portfolio</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.portfolio3 || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Prior MUN Experience?</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.hasMunExperience === 'yes' ? 'Yes' : 'No'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">MUN Experience Details</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.munExperienceDetails || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Reference</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.reference || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Registration Type</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: ${data.registrationType === 'Prudence 16B Student' ? '#b45309' : '#1e4d2b'};">
+              ${data.registrationType || 'Standard'}
+            </td>
+          </tr>
+          <tr style="background-color: #faf0f0;">
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Payment Account Name</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${data.paymentAccountName || '—'}</td>
+          </tr>
+          <tr style="background-color: #faf0f0;">
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; font-size: 12px; color: #333;">Payment Screenshot Link</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">
+              ${data.screenshotLink && data.screenshotLink !== '—' 
+                ? `<a href="${data.screenshotLink}" target="_blank" style="color: #2c5f5d; font-weight: bold; text-decoration: underline;">View Screenshot in Drive</a>` 
+                : 'No Screenshot Attached'}
+            </td>
+          </tr>
+        </table>
+        
+        <p style="font-size: 11px; color: #777; text-align: center; margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 10px;">
+          This is an automated notification from the Senatus Summit 2026 website backend.
+        </p>
+      </div>
+    `;
+
+    MailApp.sendEmail({
+      to: ADMIN_EMAIL,
+      subject: subject,
+      htmlBody: htmlBody
+    });
+  } catch (err) {
+    Logger.log('Failed to send notification email: ' + err.toString());
+  }
+}
+
 // ─── POST ────────────────────────────────────────────────────
 function doPost(e) {
   ensureHeaders()
@@ -219,28 +330,32 @@ function doPost(e) {
 
     // ── Route: delegate application ──
     const committee = String(data.committeePreference || '').trim()
-    const portfolio = String(data.countryPreference   || '').trim()
+    const portfolio1 = String(data.portfolio1 || '').trim()
+    const portfolio2 = String(data.portfolio2 || '').trim()
+    const portfolio3 = String(data.portfolio3 || '').trim()
 
-    const appRows = getAppSheet().getDataRange().getValues()
-    const isTaken = appRows.slice(1).some(
-      row => String(row[5]).trim() === committee && String(row[6]).trim() === portfolio
-    )
-    if (isTaken) {
-      return ContentService
-        .createTextOutput(JSON.stringify({ success: false, error: `${portfolio} in ${committee} is already taken.` }))
-        .setMimeType(ContentService.MimeType.JSON)
-    }
-
+    // Append to Applications sheet (Portfolio at index 6 is left blank initially for admin allotment)
     getAppSheet().appendRow([
       new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-      data.fullName, data.email, data.phone, data.institution,
-      committee, portfolio,
+      data.fullName,
+      data.email,
+      data.phone,
+      data.institution,
+      committee,
+      '', // Allotted Portfolio (Blank initially, manually assigned by admin)
+      portfolio1,
+      portfolio2,
+      portfolio3,
       data.hasMunExperience === 'yes' ? 'Yes' : 'No',
       data.munExperienceDetails || '—',
+      data.paymentAccountName || '—',
+      data.screenshotLink || '—',
       data.reference || '—',
+      data.registrationType || 'Standard'
     ])
 
-    markAllotedInCommitteeSheet(committee, portfolio)
+    // Send email notification to the administrator
+    sendNotificationEmail(data)
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true }))
@@ -315,7 +430,7 @@ function handlePayment(data) {
     getPaySheet().appendRow([ts, name, email, fileName, driveLink, 'Pending Verification'])
 
     return ContentService
-      .createTextOutput(JSON.stringify({ success: true }))
+      .createTextOutput(JSON.stringify({ success: true, driveLink: driveLink }))
       .setMimeType(ContentService.MimeType.JSON)
 
   } catch (err) {

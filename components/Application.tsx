@@ -298,7 +298,8 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
     setLoading(true)
 
     try {
-      // Upload screenshot to Google Drive (fire and forget)
+      let screenshotLink = '—'
+      // 1. Upload screenshot to Google Drive and wait for the link
       if (screenshot) {
         const base64 = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader()
@@ -306,47 +307,57 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
           reader.onerror = reject
           reader.readAsDataURL(screenshot)
         })
-        fetch('/api/payment', {
+        
+        const payRes = await fetch('/api/payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: form.fullName, email: form.email, fileName: screenshot.name, fileBase64: base64 }),
-        }).catch(() => {})
+        })
+        
+        const payData = await payRes.json()
+        if (payData.success && payData.driveLink) {
+          screenshotLink = payData.driveLink
+        } else {
+          throw new Error(payData.error || 'Failed to upload payment screenshot. Please try again.')
+        }
       }
 
-      // Submit application fields to Formspree as JSON
-      const res = await fetch('https://formspree.io/f/mgoryngd', {
+      // 2. Submit application fields to our backend submit endpoint as JSON
+      const res = await fetch('/api/submit', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          'Full Name':            form.fullName,
-          'Email':                form.email,
-          'Phone':                form.phone,
-          'Institution':          form.institution,
-          'Committee':            form.committeePreference,
-          '1st Portfolio Choice': form.portfolio1,
-          '2nd Portfolio Choice': form.portfolio2,
-          '3rd Portfolio Choice': form.portfolio3,
-          'MUN Experience':        form.hasMunExperience === 'yes' ? 'Yes' : 'No',
-          'Experience Details':    form.munExperienceDetails || '—',
-          'Payment Account Name':  form.paymentAccountName,
-          'Payment Screenshot':    screenshot?.name ?? '—',
-          'Any Reference':         form.reference || '—',
-          ...(isPrudence ? { 'Registration Type': 'Prudence 16B Student' } : {}),
+          fullName:             form.fullName,
+          email:                form.email,
+          phone:                form.phone,
+          institution:          form.institution,
+          committeePreference:  form.committeePreference,
+          portfolio1:           form.portfolio1,
+          portfolio2:           form.portfolio2,
+          portfolio3:           form.portfolio3,
+          hasMunExperience:     form.hasMunExperience,
+          munExperienceDetails: form.munExperienceDetails,
+          paymentAccountName:   form.paymentAccountName,
+          screenshotLink:       screenshotLink,
+          reference:            form.reference,
+          registrationType:     isPrudence ? 'Prudence 16B Student' : 'Standard'
         }),
       })
+      
       const data = await res.json()
-      if (res.ok) {
+      if (res.ok && data.success) {
         setSuccess(true)
         setForm(initialFormState())
         setScreenshot(null); setPreview(null)
         qr.hide()
       } else {
-        const msg = data?.errors?.[0]?.message || `Error ${res.status}: Submission failed. Please try again.`
+        const msg = data.error || `Error ${res.status}: Submission failed. Please try again.`
         setErrors(p => ({ ...p, form: msg }))
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     } catch (err) {
-      setErrors(p => ({ ...p, form: 'Network error — please check your connection and try again.' }))
+      const msg = err instanceof Error ? err.message : 'Network error — please check your connection and try again.'
+      setErrors(p => ({ ...p, form: msg }))
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {
       setLoading(false)
