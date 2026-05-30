@@ -1,21 +1,16 @@
 // ─────────────────────────────────────────────────────────────
-//  Senatus Summit — Google Apps Script  (Bidirectional Sync)
+//  Senatus Summit — Google Apps Script (Email Only & Public Matrix)
 //
 //  SETUP (one time):
-//  1. Create a blank Google Sheet named "Senatus Summit 2026"
-//  2. Open Extensions → Apps Script
-//  3. Paste this entire file, click Save
-//  4. Select the function "setup" from the dropdown → Run
-//     (This creates all sheets, tabs, and formatting automatically)
-//  5. Deploy → New deployment → Web App
+//  1. Open Extensions → Apps Script in your Google Sheet
+//  2. Paste this entire file, click Save
+//  3. Select function "setup" → click Run (to initialize committee sheets if needed)
+//  4. Deploy → New deployment → Web App
 //     Execute as: Me | Who has access: Anyone
-//  6. Copy the Web App URL → paste into .env.local as APPS_SCRIPT_URL
+//  5. Copy the Web App URL → paste into .env.local as APPS_SCRIPT_URL
 // ─────────────────────────────────────────────────────────────
 
 const PUBLIC_SHEET_ID  = '16HP1FMzmPfQcIU52s8fkBxhD8GQj2j9EYE-7D9j8vZw' // The public spreadsheet visible to everyone
-const PRIVATE_SHEET_ID = 'YOUR_PRIVATE_SPREADSHEET_ID_HERE' // The private spreadsheet for Applications and Payments
-const APP_SHEET        = 'Applications'
-const PAY_SHEET        = 'Payments'
 const STATUS_ALLOTED   = 'Alloted'
 const DRIVE_FOLDER     = 'Senatus Summit 2026 — Payment Screenshots'
 const ADMIN_EMAIL      = 'saicharantejprofessional@gmail.com'
@@ -24,16 +19,6 @@ function getPublicSS() {
   return SpreadsheetApp.openById(PUBLIC_SHEET_ID)
 }
 
-function getPrivateSS() {
-  if (!PRIVATE_SHEET_ID || PRIVATE_SHEET_ID === 'YOUR_PRIVATE_SPREADSHEET_ID_HERE' || PRIVATE_SHEET_ID === PUBLIC_SHEET_ID) {
-    console.warn("WARNING: PRIVATE_SHEET_ID is not configured. Sensitive application and payment data is being stored in the public spreadsheet!");
-    return getPublicSS();
-  }
-  return SpreadsheetApp.openById(PRIVATE_SHEET_ID)
-}
-
-function getAppSheet()            { return getPrivateSS().getSheetByName(APP_SHEET) }
-function getPaySheet()            { return getPrivateSS().getSheetByName(PAY_SHEET) }
 function getCommitteeSheet(name)  { return getPublicSS().getSheetByName(name) }
 
 // ─── DIAGNOSTIC TEST FUNCTION ─────────────────────────────────
@@ -41,39 +26,21 @@ function testAll() {
   // 1. Test Public Spreadsheet access
   const publicName = getPublicSS().getName();
   Logger.log("✅ Public Spreadsheet Access OK. Name: " + publicName);
-
-  // 2. Test Private Spreadsheet access
-  const privateName = getPrivateSS().getName();
-  Logger.log("✅ Private Spreadsheet Access OK. Name: " + privateName);
   
-  // 3. Test Drive access
+  // 2. Test Drive access
   const folder = getOrCreateFolder(DRIVE_FOLDER);
   Logger.log("✅ Drive Access OK. Folder ID: " + folder.getId());
   
-  // 4. Test Email access
+  // 3. Test Email access
   MailApp.sendEmail(ADMIN_EMAIL, 'Senatus Service Test', 'All services authorized successfully!');
   Logger.log("✅ Email Access OK. Sent test email to: " + ADMIN_EMAIL);
 }
 
 // ─── ONE-TIME SETUP ──────────────────────────────────────────
-// Run this once after pasting the script. Creates all sheets with headers + formatting.
+// Creates all public committee sheets with headers + formatting.
 function setup() {
-  const publicSS = getPublicSS()
-  publicSS.setName('Senatus Summit 2026 — Public Matrix')
-
-  const privateSS = getPrivateSS()
-  const usesSeparatePrivateSheet = (publicSS.getId() !== privateSS.getId())
-
-  if (usesSeparatePrivateSheet) {
-    privateSS.setName('Senatus Summit 2026 — Private Applications & Payments')
-  }
-
-  // ── Applications log (in private spreadsheet) ──
-  let appSheet = privateSS.getSheetByName(APP_SHEET)
-  if (!appSheet) appSheet = privateSS.insertSheet(APP_SHEET)
-  appSheet.clearContents()
-  appSheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','1st Choice','2nd Choice','3rd Choice','MUN Experience','Experience Details','Payment Account Name','Payment Screenshot Link','Any Reference','Registration Type'])
-  styleHeaderRow(appSheet, 16, '#1a3a2a', '#a8d5b5')
+  const ss = getPublicSS()
+  ss.setName('Senatus Summit 2026 — Public Matrix')
 
   // ── Committee sheets (in public spreadsheet) ──
   const committees = {
@@ -95,8 +62,8 @@ function setup() {
   }
 
   Object.entries(committees).forEach(([name, config]) => {
-    let sheet = publicSS.getSheetByName(name)
-    if (!sheet) sheet = publicSS.insertSheet(name)
+    let sheet = ss.getSheetByName(name)
+    if (!sheet) sheet = ss.insertSheet(name)
     sheet.clearContents()
     sheet.appendRow(config.headers)
     styleHeaderRow(sheet, config.headers.length, colors[name].bg, colors[name].fg)
@@ -121,46 +88,25 @@ function setup() {
     sheet.autoResizeColumns(1, config.headers.length)
   })
 
-  // ── Payments sheet (in private spreadsheet) ──
-  let paySheet = privateSS.getSheetByName(PAY_SHEET)
-  if (!paySheet) paySheet = privateSS.insertSheet(PAY_SHEET)
-  paySheet.clearContents()
-  paySheet.appendRow(['Timestamp','Full Name','Email','File Name','Drive Link','Status'])
-  styleHeaderRow(paySheet, 6, '#2a1a3a', '#c5a8d5')
-  paySheet.autoResizeColumns(1, 6)
+  // Delete default "Sheet1" if it still exists
+  const defaultSheet = ss.getSheetByName('Sheet1')
+  if (defaultSheet) ss.deleteSheet(defaultSheet)
 
-  // Clean up default sheet in public SS
-  const defaultSheetPublic = publicSS.getSheetByName('Sheet1')
-  if (defaultSheetPublic) publicSS.deleteSheet(defaultSheetPublic)
-
-  // Clean up default sheet in private SS if separate
-  if (usesSeparatePrivateSheet) {
-    const defaultSheetPrivate = privateSS.getSheetByName('Sheet1')
-    if (defaultSheetPrivate) privateSS.deleteSheet(defaultSheetPrivate)
-    
-    // Attempt to delete any leftover Applications or Payments tabs from public sheet if present to help clean up
-    try {
-      const leftoverApp = publicSS.getSheetByName(APP_SHEET)
-      if (leftoverApp) publicSS.deleteSheet(leftoverApp)
-    } catch (e) {
-      console.warn("Could not delete public Applications tab: " + e.toString())
-    }
-    try {
-      const leftoverPay = publicSS.getSheetByName(PAY_SHEET)
-      if (leftoverPay) publicSS.deleteSheet(leftoverPay)
-    } catch (e) {
-      console.warn("Could not delete public Payments tab: " + e.toString())
-    }
+  // Attempt to delete any leftover Applications or Payments tabs from public sheet if present to secure them
+  try {
+    const leftoverApp = ss.getSheetByName('Applications')
+    if (leftoverApp) ss.deleteSheet(leftoverApp)
+  } catch (e) {
+    console.warn("Could not delete public Applications tab: " + e.toString())
+  }
+  try {
+    const leftoverPay = ss.getSheetByName('Payments')
+    if (leftoverPay) ss.deleteSheet(leftoverPay)
+  } catch (e) {
+    console.warn("Could not delete public Payments tab: " + e.toString())
   }
 
-  let msg = '✅ Senatus Summit sheets created successfully!'
-  if (usesSeparatePrivateSheet) {
-    msg += '\n\nPublic Matrix sheets created in the public spreadsheet.'
-    msg += '\nApplications & Payments sheets created in the private spreadsheet.'
-  } else {
-    msg += '\n\n⚠️ WARNING: You are using the same spreadsheet for both public matrix and private applications/payments. Please set up a separate private spreadsheet for security!'
-  }
-
+  const msg = '✅ Senatus Summit public matrix sheets initialized successfully!'
   try {
     SpreadsheetApp.getUi().alert(msg)
   } catch (e) {
@@ -176,31 +122,9 @@ function styleHeaderRow(sheet, numCols, bgColor, fontColor) {
         .setFontSize(11)
 }
 
-// ─── ENSURE HEADERS (runtime guard) ─────────────────────────
-function ensureHeaders() {
-  const privateSS = getPrivateSS()
-  const publicSS = getPublicSS()
-
-  // Applications (in private sheet)
-  let appSheet = privateSS.getSheetByName(APP_SHEET)
-  if (!appSheet) appSheet = privateSS.insertSheet(APP_SHEET)
-  if (appSheet.getLastRow() === 0) {
-    appSheet.appendRow(['Timestamp','Full Name','Email','Phone','Institution','Committee','Portfolio','1st Choice','2nd Choice','3rd Choice','MUN Experience','Experience Details','Payment Account Name','Payment Screenshot Link','Any Reference','Registration Type'])
-    styleHeaderRow(appSheet, 16, '#1a3a2a', '#a8d5b5')
-  }
-
-  // Payments (in private sheet)
-  let paySheet = privateSS.getSheetByName(PAY_SHEET)
-  if (!paySheet) paySheet = privateSS.insertSheet(PAY_SHEET)
-  if (paySheet.getLastRow() === 0) {
-    paySheet.appendRow(['Timestamp','Full Name','Email','File Name','Drive Link','Status'])
-    styleHeaderRow(paySheet, 6, '#2a1a3a', '#c5a8d5')
-  }
-}
-
 // ─── GET ─────────────────────────────────────────────────────
+// Reads allotments to show taken slots on website.
 function doGet() {
-  ensureHeaders()
   const taken = []
   const seen  = new Set()
 
@@ -209,15 +133,7 @@ function doGet() {
     if (!seen.has(key)) { seen.add(key); taken.push({ committee, country: portfolio }) }
   }
 
-  // Source 1 — Applications sheet
-  const appRows = getAppSheet().getDataRange().getValues()
-  appRows.slice(1).forEach(row => {
-    const committee = String(row[5] || '').trim()
-    const portfolio = String(row[6] || '').trim()
-    if (committee && portfolio) add(committee, portfolio)
-  })
-
-  // Source 2 — UNGA / UNCSW / UNHRC / IP: col A = portfolio, col B = status
+  // Source — UNGA / UNCSW / UNHRC / IP: col A = portfolio, col B = status
   ;['UNGA', 'UNCSW', 'UNHRC', 'IP'].forEach(name => {
     const sheet = getCommitteeSheet(name)
     if (!sheet) return
@@ -228,7 +144,7 @@ function doGet() {
     })
   })
 
-  // Source 2 — FIA: col A = position, col B = name, col C = status
+  // Source — FIA: col A = position, col B = name, col C = status
   const fiaSheet = getCommitteeSheet('FIA')
   if (fiaSheet) {
     fiaSheet.getDataRange().getValues().slice(1).forEach(row => {
@@ -240,7 +156,7 @@ function doGet() {
     })
   }
 
-  // Source 2 — AIPPM: col A = name, col B = party, col C = status
+  // Source — AIPPM: col A = name, col B = party, col C = status
   const aippmSheet = getCommitteeSheet('AIPPM')
   if (aippmSheet) {
     const partyAbbr = {
@@ -377,7 +293,6 @@ function sendNotificationEmail(data) {
 
 // ─── POST ────────────────────────────────────────────────────
 function doPost(e) {
-  ensureHeaders()
   try {
     const data = JSON.parse(e.postData.contents)
 
@@ -386,33 +301,7 @@ function doPost(e) {
       return handlePayment(data)
     }
 
-    // ── Route: delegate application ──
-    const committee = String(data.committeePreference || '').trim()
-    const portfolio1 = String(data.portfolio1 || '').trim()
-    const portfolio2 = String(data.portfolio2 || '').trim()
-    const portfolio3 = String(data.portfolio3 || '').trim()
-
-    // Append to Applications sheet (Portfolio at index 6 is left blank initially for admin allotment)
-    getAppSheet().appendRow([
-      new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-      data.fullName,
-      data.email,
-      data.phone,
-      data.institution,
-      committee,
-      '', // Allotted Portfolio (Blank initially, manually assigned by admin)
-      portfolio1,
-      portfolio2,
-      portfolio3,
-      data.hasMunExperience === 'yes' ? 'Yes' : 'No',
-      data.munExperienceDetails || '—',
-      data.paymentAccountName || '—',
-      data.screenshotLink || '—',
-      data.reference || '—',
-      data.registrationType || 'Standard'
-    ])
-
-    // Send email notification to the administrator
+    // Send email notification to the administrator (automatic mailing system)
     sendNotificationEmail(data)
 
     return ContentService
@@ -423,42 +312,6 @@ function doPost(e) {
     return ContentService
       .createTextOutput(JSON.stringify({ success: false, error: String(err) }))
       .setMimeType(ContentService.MimeType.JSON)
-  }
-}
-
-// ─── Mark allotment in committee sheet ───────────────────────
-function markAllotedInCommitteeSheet(committee, portfolio) {
-  const sheet = getCommitteeSheet(committee)
-  if (!sheet) return
-  const data = sheet.getDataRange().getValues()
-
-  if (committee === 'FIA') {
-    for (let i = 1; i < data.length; i++) {
-      const pos  = String(data[i][0] || '').trim()
-      const name = String(data[i][1] || '').trim()
-      if (`${pos} — ${name}` === portfolio) {
-        sheet.getRange(i + 1, 3).setValue(STATUS_ALLOTED)
-        sheet.getRange(i + 1, 3).setBackground('#1e4d2b').setFontColor('#6fcf97')
-        break
-      }
-    }
-  } else if (committee === 'AIPPM') {
-    const namePart = portfolio.split(' (')[0].trim()
-    for (let i = 1; i < data.length; i++) {
-      if (String(data[i][0] || '').trim().toLowerCase() === namePart.toLowerCase()) {
-        sheet.getRange(i + 1, 3).setValue(STATUS_ALLOTED)
-        sheet.getRange(i + 1, 3).setBackground('#1e4d2b').setFontColor('#6fcf97')
-        break
-      }
-    }
-  } else {
-    for (let i = 1; i < data.length; i++) {
-      if (String(data[i][0] || '').trim() === portfolio) {
-        sheet.getRange(i + 1, 2).setValue(STATUS_ALLOTED)
-        sheet.getRange(i + 1, 2).setBackground('#1e4d2b').setFontColor('#6fcf97')
-        break
-      }
-    }
   }
 }
 
@@ -482,10 +335,6 @@ function handlePayment(data) {
     const file    = folder.createFile(blob)
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
     const driveLink = file.getUrl()
-
-    // Log to Payments sheet
-    const ts = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-    getPaySheet().appendRow([ts, name, email, fileName, driveLink, 'Pending Verification'])
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true, driveLink: driveLink }))
