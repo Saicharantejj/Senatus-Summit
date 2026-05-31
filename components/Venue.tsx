@@ -58,7 +58,7 @@ export default function Venue() {
               <div className="flex flex-col gap-1">
                 <span className="font-inter text-[10px] font-bold text-[#475569] tracking-wider uppercase">Location Address</span>
                 <p className="font-inter text-xs text-[#94a3b8] font-medium leading-relaxed">
-                  J22C+F34, HAF, Pocket 4, Sector 16B Dwarka, New Delhi, Delhi 110078
+                  Prudence School, Dwarka Sector 16B, J22C+F34, HAF, Pocket 4, New Delhi, Delhi 110078
                 </p>
               </div>
             </div>
@@ -91,7 +91,7 @@ export default function Venue() {
               </p>
               
               <a
-                href="https://www.google.com/maps?q=J22C%2BF34,+HAF,+Pocket+4,+Sector+16B+Dwarka,+New+Delhi,+Delhi+110078&utm_source=chatgpt.com"
+                href="https://www.google.com/maps?q=Prudence+School,+Dwarka+Sector+16B,+J22C%2BF34,+HAF,+Pocket+4,+New+Delhi,+Delhi+110078"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-fit inline-flex items-center gap-2 rounded-xl bg-[#080b10] border border-[#1c232b] px-6 py-4 font-inter text-[10px] font-black tracking-[0.25em] text-[#94a3b8] uppercase hover:bg-[#2c5f5d] hover:border-[#2c5f5d] hover:text-white hover:shadow-[0_0_25px_rgba(44,95,93,0.4)] transition-all duration-300"

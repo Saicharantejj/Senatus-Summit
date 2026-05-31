@@ -211,12 +211,12 @@ export default function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25z" />
                   </svg>
                   <span>
-                    J22C+F34, HAF, Pocket 4, Sector 16B Dwarka, New Delhi, Delhi 110078
+                    Prudence School, Dwarka Sector 16B, J22C+F34, HAF, Pocket 4, New Delhi, Delhi 110078
                   </span>
                 </div>
 
                 <a
-                  href="https://www.google.com/maps?q=J22C%2BF34,+HAF,+Pocket+4,+Sector+16B+Dwarka,+New+Delhi,+Delhi+110078&utm_source=chatgpt.com"
+                  href="https://www.google.com/maps?q=Prudence+School,+Dwarka+Sector+16B,+J22C%2BF34,+HAF,+Pocket+4,+New+Delhi,+Delhi+110078"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-fit inline-flex items-center gap-2 rounded-lg bg-[#0a0d12] border border-[#1c232b] px-5 py-3.5 font-inter text-[9px] font-black tracking-[0.25em] text-[#94a3b8] uppercase hover:bg-[#2c5f5d] hover:border-[#2c5f5d] hover:text-white hover:shadow-[0_0_20px_rgba(44,95,93,0.3)] transition-all duration-300"
