@@ -4,6 +4,7 @@ import './globals.css'
 import ScrollProgress from '@/components/ScrollProgress'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { Analytics } from '@vercel/analytics/next'
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <main className="relative z-10">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   )
