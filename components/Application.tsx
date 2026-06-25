@@ -237,11 +237,12 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
   })
 
   const [form, setForm]         = useState<FormState>(initialFormState)
-  const [errors, setErrors]     = useState<Partial<FormState> & { screenshot?: string; form?: string }>({})
+  const [errors, setErrors]     = useState<Partial<FormState> & { screenshot?: string; form?: string; agreeToTerms?: string }>({})
   const [loading, setLoading]   = useState(false)
   const [success, setSuccess]   = useState(false)
   const [screenshot, setScreenshot]   = useState<File | null>(null)
   const [preview, setPreview]         = useState<string | null>(null)
+  const [agreeToTerms, setAgreeToTerms] = useState(false)
   const fileRef                       = useRef<HTMLInputElement>(null)
   const qr                            = useQrTimer()
 
@@ -267,7 +268,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
     }
 
   const validate = (): boolean => {
-    const e: Partial<FormState> = {}
+    const e: Partial<FormState> & { agreeToTerms?: string } = {}
     if (!form.fullName.trim())                            e.fullName = 'Full name is required.'
     if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) e.email = 'Enter a valid email address.'
     if (!form.phone.match(/^\+?[\d\s\-()]{8,15}$/))      e.phone = 'Enter a valid phone number.'
@@ -284,6 +285,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
       e.portfolio3 = '3rd preference must differ from 2nd.'
     if (!form.hasMunExperience) e.hasMunExperience = 'Please select an option.'
     if (!form.paymentAccountName.trim()) e.paymentAccountName = 'Please enter the account name used for payment.'
+    if (!agreeToTerms) e.agreeToTerms = 'You must agree to the Terms & Conditions to proceed.'
     setErrors(e)
     if (!screenshot) {
       setErrors(prev => ({ ...prev, ...e, screenshot: 'Payment screenshot is required before submitting.' }))
@@ -383,6 +385,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
         setSuccess(true)
         setForm(initialFormState())
         setScreenshot(null); setPreview(null)
+        setAgreeToTerms(false)
         qr.hide()
       } else {
         const msg = data.error || `Error ${res.status}: Submission failed. Please try again.`
@@ -763,6 +766,42 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
                   </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Terms and Conditions Notice */}
+              <div className="border border-[#1c232b] rounded-xl p-5 bg-[#0b0e14] space-y-4">
+                <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
+                  Terms & Conditions
+                </p>
+                <div className="font-inter text-[11px] text-[#475569] leading-relaxed space-y-2">
+                  <p>
+                    • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances.
+                  </p>
+                  <p>
+                    • <strong>Committee & Portfolio Modifications:</strong> Changes to committee preferences and assigned portfolios are permitted (subject to availability), but no refunds will be issued under any other circumstances.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3 pt-2">
+                  <input
+                    type="checkbox"
+                    id="agreeToTerms"
+                    checked={agreeToTerms}
+                    onChange={(e) => {
+                      setAgreeToTerms(e.target.checked)
+                      setErrors(p => ({ ...p, agreeToTerms: undefined }))
+                    }}
+                    className="mt-1 h-3.5 w-3.5 rounded border-[#1c232b] bg-[#0a0d12] text-[#2c5f5d] focus:ring-[#2c5f5d] accent-[#2c5f5d]"
+                  />
+                  <label htmlFor="agreeToTerms" className="font-inter text-[10px] text-[#475569] leading-tight select-none cursor-pointer">
+                    I read, understand, and agree to the refund and modification policy of The Senatus Summit 2026 as outlined in the{' '}
+                    <Link href="/terms" target="_blank" className="text-[#52a19e] hover:text-[#7abfbd] underline font-bold transition-colors">
+                      Terms & Conditions
+                    </Link>.
+                  </label>
+                </div>
+                {errors.agreeToTerms && (
+                  <p className="font-inter text-[11px] text-rose-500/80">{errors.agreeToTerms}</p>
+                )}
               </div>
 
               {/* Submit */}

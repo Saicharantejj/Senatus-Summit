@@ -27,6 +27,7 @@ export default function Payment() {
   const [loading, setLoading]     = useState(false)
   const [success, setSuccess]     = useState(false)
   const [error, setError]         = useState('')
+  const [agreeToTerms, setAgreeToTerms] = useState(false)
 
   // QR reveal state
   const [qrVisible, setQrVisible]   = useState(false)
@@ -80,6 +81,7 @@ export default function Payment() {
     if (!name.trim())  { setError('Please enter your name.'); return }
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) { setError('Please enter a valid email.'); return }
     if (!file)         { setError('Screenshot is required — please upload your payment proof before submitting.'); return }
+    if (!agreeToTerms) { setError('You must agree to the Terms & Conditions to proceed.'); return }
     setError('')
     setLoading(true)
 
@@ -101,6 +103,7 @@ export default function Payment() {
       if (data.success) {
         setSuccess(true)
         setName(''); setEmail(''); setFile(null); setPreview(null)
+        setAgreeToTerms(false)
         stopTimer(); setQrVisible(false)
       } else {
         setError(data.error || 'Submission failed. Please try again.')
@@ -304,6 +307,36 @@ export default function Payment() {
                         <span className="font-inter text-[9px] text-[#222]">JPG, PNG up to 5 MB</span>
                       </button>
                     )}
+                  </div>
+
+                  {/* Terms and Conditions Notice */}
+                  <div className="border border-[#1c232b] rounded-xl p-4 bg-[#0d1117] space-y-3 w-full">
+                    <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
+                      Terms & Conditions
+                    </p>
+                    <div className="font-inter text-[10px] text-[#475569] leading-relaxed space-y-1">
+                      <p>
+                        • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances.
+                      </p>
+                      <p>
+                        • <strong>Modifications:</strong> Changes of committees and portfolios are allowed (subject to availability), but no refunds will be issued under any other circumstances.
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-2.5 pt-1">
+                      <input
+                        type="checkbox"
+                        id="agreeToTermsPay"
+                        checked={agreeToTerms}
+                        onChange={(e) => {
+                          setAgreeToTerms(e.target.checked)
+                          setError('')
+                        }}
+                        className="mt-0.5 h-3.5 w-3.5 rounded border-[#1c232b] bg-[#0a0d12] text-[#2c5f5d] focus:ring-[#2c5f5d] accent-[#2c5f5d]"
+                      />
+                      <label htmlFor="agreeToTermsPay" className="font-inter text-[9px] text-[#475569] leading-tight select-none cursor-pointer">
+                        I agree to the refund & portfolio modification policy.
+                      </label>
+                    </div>
                   </div>
 
                   {error && <p className="font-inter text-[11px] text-rose-500/80">{error}</p>}
