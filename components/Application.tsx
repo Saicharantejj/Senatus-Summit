@@ -198,12 +198,12 @@ const portfolioLabel: Record<string, string> = {
 
 // ─── Committee options ───────────────────────────────────────
 const committeeOptions = [
-  { value: 'UNCSW', label: 'UN Commission on the Status of Women (UNCSW)' },
+  { value: 'UNCSW', label: 'UN Commission on the Status of Women (UNCSW) — FILLED & CLOSED', disabled: true },
   { value: 'AIPPM', label: 'All India Political Parties Meet (AIPPM)' },
   { value: 'UNHRC', label: 'UN Human Rights Council (UNHRC)' },
   { value: 'UNGA',  label: 'UN General Assembly (UNGA)' },
   { value: 'IP',    label: 'International Press (IP)' },
-  { value: 'FIA',   label: 'Fédération Internationale de l\'Automobile (FIA)' },
+  { value: 'FIA',   label: 'Fédération Internationale de l\'Automobile (FIA) — CLOSED', disabled: true },
 ]
 
 const fadeUp = (delay = 0) => ({
@@ -525,7 +525,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
             <div className="card rounded-xl p-5 flex items-center gap-4">
               <div className="flex flex-col gap-1 flex-1">
                 <span className="font-inter text-[8px] font-bold tracking-[0.18em] uppercase text-[#475569]">
-                  UNGA · UNCSW · UNHRC · AIPPM · FIA
+                  UNGA · <span className="line-through text-rose-500/50">UNCSW (FILLED)</span> · UNHRC · AIPPM · <span className="line-through text-rose-500/50">FIA (CLOSED)</span>
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">
@@ -631,7 +631,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
                 >
                   <option value="">Select a committee</option>
                   {committeeOptions.map((c) => (
-                    <option key={c.value} value={c.value}>{c.label}</option>
+                    <option key={c.value} value={c.value} disabled={c.disabled}>{c.label}</option>
                   ))}
                 </select>
               </Field>

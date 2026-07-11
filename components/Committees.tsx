@@ -135,16 +135,30 @@ function CommitteeCard({
               >
                 {committee.abbr}
               </span>
-              <span
-                className="font-inter text-[8px] font-black tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border"
-                style={{
-                  color: committee.color,
-                  borderColor: `${committee.color}40`,
-                  background: `${committee.color}10`,
-                }}
-              >
-                {committee.category}
-              </span>
+              <div className="flex flex-col items-end gap-1.5">
+                <span
+                  className="font-inter text-[8px] font-black tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border"
+                  style={{
+                    color: committee.color,
+                    borderColor: `${committee.color}40`,
+                    background: `${committee.color}10`,
+                  }}
+                >
+                  {committee.category}
+                </span>
+                {(committee.abbr === 'UNCSW' || committee.abbr === 'FIA') && (
+                  <span
+                    className="font-inter text-[8px] font-black tracking-[0.2em] uppercase px-3 py-1 rounded-full border"
+                    style={{
+                      color: '#ef4444',
+                      borderColor: '#ef444440',
+                      background: '#ef444410',
+                    }}
+                  >
+                    {committee.abbr === 'UNCSW' ? 'Filled & Closed' : 'Closed'}
+                  </span>
+                )}
+              </div>
             </div>
 
             <div>
@@ -212,16 +226,30 @@ function CommitteeCard({
                 >
                   {committee.abbr}
                 </span>
-                <span
-                  className="font-inter text-[9px] font-black tracking-[0.25em] uppercase px-3 py-1.5 rounded-full border self-start"
-                  style={{
-                    color: committee.color,
-                    borderColor: `${committee.color}40`,
-                    background: `${committee.color}10`,
-                  }}
-                >
-                  {committee.category}
-                </span>
+                <div className="flex flex-wrap gap-2">
+                  <span
+                    className="font-inter text-[9px] font-black tracking-[0.25em] uppercase px-3 py-1.5 rounded-full border self-start"
+                    style={{
+                      color: committee.color,
+                      borderColor: `${committee.color}40`,
+                      background: `${committee.color}10`,
+                    }}
+                  >
+                    {committee.category}
+                  </span>
+                  {(committee.abbr === 'UNCSW' || committee.abbr === 'FIA') && (
+                    <span
+                      className="font-inter text-[9px] font-black tracking-[0.25em] uppercase px-3 py-1.5 rounded-full border self-start"
+                      style={{
+                        color: '#ef4444',
+                        borderColor: '#ef444440',
+                        background: '#ef444410',
+                      }}
+                    >
+                      {committee.abbr === 'UNCSW' ? 'Filled & Closed' : 'Closed'}
+                    </span>
+                  )}
+                </div>
                 <h3 className="font-cinzel font-bold text-lg md:text-xl text-[#e5e7eb] leading-snug">
                   {committee.name}
                 </h3>
@@ -276,20 +304,33 @@ function CommitteeCard({
                 </div>
 
                 {/* CTA */}
-                <Link
-                  href="/apply"
-                  onClick={(e) => e.stopPropagation()}
-                  className="self-start font-inter font-black text-[11px] tracking-[0.25em] uppercase px-8 py-4 rounded-xl inline-flex items-center gap-3 border transition-all duration-300 hover:brightness-110 mt-2"
-                  style={{
-                    background: `${committee.color}20`,
-                    borderColor: `${committee.color}60`,
-                    color: committee.color,
-                    boxShadow: `0 0 24px -4px ${committee.color}50`,
-                  }}
-                >
-                  Apply for this Committee
-                  <ArrowRight size={14} />
-                </Link>
+                {committee.abbr === 'UNCSW' || committee.abbr === 'FIA' ? (
+                  <div
+                    className="self-start font-inter font-black text-[11px] tracking-[0.25em] uppercase px-8 py-4 rounded-xl inline-flex items-center gap-3 border mt-2 opacity-50 cursor-not-allowed"
+                    style={{
+                      background: '#1a1010',
+                      borderColor: '#ef444450',
+                      color: '#ef4444',
+                    }}
+                  >
+                    Applications Closed
+                  </div>
+                ) : (
+                  <Link
+                    href="/apply"
+                    onClick={(e) => e.stopPropagation()}
+                    className="self-start font-inter font-black text-[11px] tracking-[0.25em] uppercase px-8 py-4 rounded-xl inline-flex items-center gap-3 border transition-all duration-300 hover:brightness-110 mt-2"
+                    style={{
+                      background: `${committee.color}20`,
+                      borderColor: `${committee.color}60`,
+                      color: committee.color,
+                      boxShadow: `0 0 24px -4px ${committee.color}50`,
+                    }}
+                  >
+                    Apply for this Committee
+                    <ArrowRight size={14} />
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
