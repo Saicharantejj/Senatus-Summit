@@ -43,10 +43,10 @@ export default function Terms() {
               2. Refund Policy
             </h2>
             <p className="mb-4 font-semibold text-[#dedad4]">
-              Unless the conference is officially cancelled by the organizing committee, there will not be any refunds made under any other circumstances.
+              Unless the conference is officially cancelled by the organizing committee, there will not be any refunds made under any other circumstances, including but not limited to any change in the venue of the conference.
             </p>
             <p>
-              By completing your payment and submitting your registration, you acknowledge and agree that your registration fee is strictly non-refundable, including but not limited to cases of personal scheduling conflicts, failure to attend the conference, portfolio dissatisfaction, or travel issues.
+              By completing your payment and submitting your registration, you acknowledge and agree that your registration fee is strictly non-refundable, including but not limited to cases of personal scheduling conflicts, failure to attend the conference, portfolio dissatisfaction, travel issues, or changes in the conference venue.
             </p>
           </div>
 

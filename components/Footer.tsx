@@ -9,7 +9,6 @@ const navLinks = [
   { label: 'Committees',   href: '/committees' },
   { label: 'Timeline',     href: '/timeline' },
   { label: 'Apply',        href: '/apply' },
-  { label: 'Prudence 16B', href: '/prudence' },
   { label: 'Terms',        href: '/terms' },
   { label: 'Contact',      href: '/contact' },
 ]

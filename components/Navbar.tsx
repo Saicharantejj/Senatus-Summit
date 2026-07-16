@@ -12,7 +12,6 @@ const navLinks = [
   { label: 'Venue',        href: '/venue' },
   { label: 'Committees',   href: '/committees' },
   { label: 'Timeline',     href: '/timeline' },
-  { label: 'Prudence 16B', href: '/prudence' },
   { label: 'Contact',      href: '/contact' },
 ]
 

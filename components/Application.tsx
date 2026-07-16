@@ -230,10 +230,10 @@ function Field({
   )
 }
 
-export default function Application({ isPrudence = false }: { isPrudence?: boolean }) {
+export default function Application() {
   const initialFormState = () => ({
     ...INITIAL,
-    institution: isPrudence ? 'Prudence School, Dwarka Sector 16B' : '',
+    institution: '',
   })
 
   const [form, setForm]         = useState<FormState>(initialFormState)
@@ -376,7 +376,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
           paymentAccountName:   form.paymentAccountName,
           screenshotLink:       screenshotLink,
           reference:            form.reference,
-          registrationType:     isPrudence ? 'Prudence 16B Student' : 'Standard'
+          registrationType:     'Standard'
         }),
       })
       
@@ -430,50 +430,11 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
         <motion.div {...fadeUp(0)} className="mb-14">
           <div className="section-label text-[#94a3b8] mb-6">Applications Open</div>
           <h2 className="font-cinzel font-semibold text-3xl md:text-4xl lg:text-5xl text-[#e5e7eb] leading-tight">
-            {isPrudence ? 'Prudence 16B Registration' : 'Claim Your Seat'}
+            Claim Your Seat
           </h2>
           <p className="font-inter text-[#555] mt-4 max-w-md text-sm leading-relaxed">
             A confirmation email will be sent to you within 24 hours.
           </p>
-
-          {!isPrudence ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 p-4 rounded-xl border border-[#2c5f5d]/30 bg-[#0e1a1a]/60 backdrop-blur-md flex items-center gap-3 text-sm text-[#7abfbd]"
-            >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-[#52a19e] opacity-75 animate-ping" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#2c5f5d]" />
-              </span>
-              <span className="font-inter text-xs">
-                Are you a student of <strong>Prudence School, Dwarka Sector 16B</strong>? Please use the{' '}
-                <Link href="/prudence" className="underline hover:text-white font-bold transition-colors">
-                  Prudence 16B Registration Portal
-                </Link>{' '}
-                to register with a special discount.
-              </span>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 p-4 rounded-xl border border-[#b45309]/30 bg-[#1c150e]/60 backdrop-blur-md flex items-center gap-3 text-sm text-[#d97706]"
-            >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-[#d97706] opacity-75 animate-ping" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#b45309]" />
-              </span>
-              <span className="font-inter text-xs">
-                This portal is strictly for the students of <strong>Prudence School, Dwarka Sector 16B</strong>. Other delegates should use the{' '}
-                <Link href="/apply" className="underline hover:text-white font-bold transition-colors">
-                  Standard Registration Portal
-                </Link>.
-              </span>
-            </motion.div>
-          )}
 
           {/* Live Matrix — high-visibility CTA */}
           <motion.a
@@ -518,7 +479,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
         <motion.div {...fadeUp(0.15)} className="mb-10">
           <div className="flex items-center gap-3 mb-4">
             <p className="font-inter text-[9px] font-bold tracking-[0.2em] uppercase text-[#475569]">
-              Delegate Fees {isPrudence && '(Prudence 16B Discount Applied)'}
+              Delegate Fees
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -529,9 +490,8 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">
-                    {isPrudence ? '₹2,000' : '₹2,100'}
+                    ₹2,100
                   </span>
-                  {isPrudence && <span className="font-inter text-[10px] line-through text-[#475569] ml-2">₹2,100</span>}
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
@@ -543,9 +503,8 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="font-cinzel font-bold text-xl text-[#2c5f5d]">
-                    {isPrudence ? '₹1,900' : '₹2,000'}
+                    ₹2,000
                   </span>
-                  {isPrudence && <span className="font-inter text-[10px] line-through text-[#475569] ml-2">₹2,000</span>}
                 </div>
                 <span className="font-inter text-[9px] text-[#333] tracking-wide">Per delegate</span>
               </div>
@@ -617,8 +576,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
                 </Field>
                 <Field label="Institution / School" required error={errors.institution}>
                   <input type="text" placeholder="Your college or school" value={form.institution} onChange={set('institution')}
-                    disabled={isPrudence}
-                    className={`form-input ${errors.institution ? 'border-rose-900/60' : ''} ${isPrudence ? 'opacity-60 cursor-not-allowed' : ''}`} />
+                    className={`form-input ${errors.institution ? 'border-rose-900/60' : ''}`} />
                 </Field>
               </div>
 
@@ -775,7 +733,7 @@ export default function Application({ isPrudence = false }: { isPrudence?: boole
                 </p>
                 <div className="font-inter text-[11px] text-[#475569] leading-relaxed space-y-2">
                   <p>
-                    • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances.
+                    • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances (including venue changes).
                   </p>
                   <p>
                     • <strong>Committee & Portfolio Modifications:</strong> Changes to committee preferences and assigned portfolios are permitted (subject to availability), but no refunds will be issued under any other circumstances.
