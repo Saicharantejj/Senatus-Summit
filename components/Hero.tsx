@@ -83,7 +83,7 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    const target = new Date('2026-07-25T09:00:00')
+    const target = new Date('2026-08-01T09:00:00')
     const tick = () => {
       const diff = target.getTime() - Date.now()
       if (diff <= 0) return
@@ -198,7 +198,7 @@ export default function Hero() {
           {...fadeUp(1.2)}
           className="font-inter text-[12px] font-black tracking-[0.3em] text-[#52a19e] mb-20 uppercase"
         >
-          25 // 26 &nbsp;July&nbsp; 2026
+          1 // 2 &nbsp;August&nbsp; 2026
         </motion.div>
 
         {/* Countdown — Enhanced Cards */}

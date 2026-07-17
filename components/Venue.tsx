@@ -38,15 +38,15 @@ export default function Venue() {
                 Host Institution
               </span>
               <h3 className="font-cinzel font-black text-3xl text-[#e5e7eb] mt-3 mb-1 tracking-wide">
-                To Be Announced
+                Masters Union
               </h3>
               <p className="font-inter text-[#475569] text-xs font-bold uppercase tracking-[0.15em]">
-                Venue details coming soon
+                DLF Cyber Park, Gurugram
               </p>
             </div>
             
             <p className="font-inter text-sm md:text-base text-[#94a3b8] leading-relaxed font-medium">
-              We are finalizing negotiations with our host institutions. The chosen campus will boast state-of-the-art conference facilities, spacious committee rooms, and advanced audio-visual infrastructure, providing delegates with the ideal environment for intense debate and diplomatic resolution.
+              Located in the heart of Gurugram's premium business district, Masters Union features world-class auditoriums, specialized discussion chambers, and state-of-the-art academic infrastructure, providing delegates with an unparalleled environment for debate and diplomatic resolution.
             </p>
             
             <div className="w-full h-px bg-[#1c232b] my-2" />
@@ -58,7 +58,7 @@ export default function Venue() {
               <div className="flex flex-col gap-1">
                 <span className="font-inter text-[10px] font-bold text-[#475569] tracking-wider uppercase">Location Address</span>
                 <p className="font-inter text-xs text-[#94a3b8] font-medium leading-relaxed">
-                  Address details and directions will be published as soon as the venue partner is officially confirmed.
+                  Tower C, DLF Cyber Park, Sector 20, Udyog Vihar Phase III, Gurugram, Haryana 122008
                 </p>
               </div>
             </div>
@@ -68,15 +68,20 @@ export default function Venue() {
           <motion.div 
             {...fadeUp(0.2)} 
             className="lg:col-span-7 relative group rounded-2xl border border-[#1c232b] bg-[#080b10] overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-end p-8 sm:p-12 hover:border-[#2c5f5d]/30 transition-all duration-500 shadow-2xl"
+            style={{
+              backgroundImage: "url('/venue.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
           >
             {/* Gradient overlay to ensure high contrast */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#080b10] via-[#080b10]/95 to-transparent z-0" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#080b10] via-[#080b10]/75 to-transparent z-0" />
 
             {/* Content overlay */}
             <div className="relative z-10 flex flex-col gap-6">
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#52a19e] animate-pulse" />
-                <span className="font-inter text-[10px] font-bold tracking-[0.25em] text-[#52a19e] uppercase">New Venue Coming Soon</span>
+                <span className="font-inter text-[10px] font-bold tracking-[0.25em] text-[#52a19e] uppercase">Official Venue Partner</span>
               </div>
               
               <p className="font-inter text-xs text-[#475569] font-semibold uppercase tracking-wider max-w-md leading-relaxed">

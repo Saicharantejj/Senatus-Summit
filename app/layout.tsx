@@ -22,11 +22,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'The Senatus Summit 2026 | Where Debate Meets Diplomacy',
   description:
-    'The Senatus Summit is a premier Model United Nations conference uniting the brightest minds in debate and diplomacy. July 25–26, 2026.',
+    'The Senatus Summit is a premier Model United Nations conference uniting the brightest minds in debate and diplomacy. August 1–2, 2026.',
   keywords: ['Model UN', 'MUN', 'Senatus Summit', 'conference', 'debate', 'diplomacy', '2026'],
   openGraph: {
     title: 'The Senatus Summit 2026',
-    description: 'Where Debate Meets Diplomacy — July 25–26, 2026',
+    description: 'Where Debate Meets Diplomacy — August 1–2, 2026',
     type: 'website',
   },
 }

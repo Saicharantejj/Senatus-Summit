@@ -320,8 +320,8 @@ export default function Timeline() {
           </div>
         </motion.div>
 
-        <DaySection day="DAY 01" dayLabel="Saturday" date="25 July 2026" events={day1} />
-        <DaySection day="DAY 02" dayLabel="Sunday"   date="26 July 2026" events={day2} />
+        <DaySection day="DAY 01" dayLabel="Saturday" date="1 August 2026" events={day1} />
+        <DaySection day="DAY 02" dayLabel="Sunday"   date="2 August 2026" events={day2} />
       </div>
     </section>
   )

@@ -194,13 +194,13 @@ export default function Contact() {
                   Official Venue Partner
                 </span>
                 <h3 className="font-cinzel font-black text-2xl md:text-3xl text-[#e5e7eb] mt-5 mb-2 tracking-wide leading-tight group-hover:text-white transition-colors duration-300">
-                  To Be Announced
+                  Masters Union
                 </h3>
                 <p className="font-inter text-[#475569] text-xs font-bold uppercase tracking-[0.1em] mb-6">
-                  Venue Details Coming Soon
+                  DLF Cyber Park, Gurugram
                 </p>
                 <p className="font-inter text-[13px] text-[#94a3b8] leading-relaxed font-medium max-w-md">
-                  A state-of-the-art campus featuring modern conference chambers, debate halls, and premium infrastructure will be chosen to accommodate the premier diplomacy and discussion forum of the Senatus Summit 2026.
+                  A state-of-the-art campus featuring modern conference chambers, debate halls, and premium infrastructure chosen to accommodate the premier diplomacy and discussion forum of the Senatus Summit 2026.
                 </p>
               </div>
 
@@ -211,7 +211,7 @@ export default function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25z" />
                   </svg>
                   <span>
-                    The updated venue name and address coordinates will be published shortly.
+                    Tower C, DLF Cyber Park, Sector 20, Udyog Vihar Phase III, Gurugram, Haryana 122008
                   </span>
                 </div>
               </div>
