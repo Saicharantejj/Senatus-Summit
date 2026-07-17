@@ -182,7 +182,7 @@ export default function Contact() {
             <div
               className="absolute inset-0 z-0 bg-cover bg-center opacity-[0.18] transition-transform duration-700 group-hover:scale-105"
               style={{
-                backgroundImage: "url('/venue.jpg')",
+                backgroundImage: "url('/masters_union.jpg')",
               }}
             />
             {/* Dark gradient fade over the image */}

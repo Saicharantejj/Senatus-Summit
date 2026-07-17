@@ -69,7 +69,7 @@ export default function Venue() {
             {...fadeUp(0.2)} 
             className="lg:col-span-7 relative group rounded-2xl border border-[#1c232b] bg-[#080b10] overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-end p-8 sm:p-12 hover:border-[#2c5f5d]/30 transition-all duration-500 shadow-2xl"
             style={{
-              backgroundImage: "url('/venue.jpg')",
+              backgroundImage: "url('/masters_union.jpg')",
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
