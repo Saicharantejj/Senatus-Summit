@@ -733,7 +733,7 @@ export default function Application() {
                 </p>
                 <div className="font-inter text-[11px] text-[#475569] leading-relaxed space-y-2">
                   <p>
-                    • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances (including venue changes).
+                    • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances (including venue or date changes).
                   </p>
                   <p>
                     • <strong>Committee & Portfolio Modifications:</strong> Changes to committee preferences and assigned portfolios are permitted (subject to availability), but no refunds will be issued under any other circumstances.

@@ -316,7 +316,7 @@ export default function Payment() {
                     </p>
                     <div className="font-inter text-[10px] text-[#475569] leading-relaxed space-y-1">
                       <p>
-                        • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances (including venue changes).
+                        • <strong>Refund Policy:</strong> Unless the conference is cancelled by the organizing committee, no refunds will be made under any circumstances (including venue or date changes).
                       </p>
                       <p>
                         • <strong>Modifications:</strong> Changes of committees and portfolios are allowed (subject to availability), but no refunds will be issued under any other circumstances.
